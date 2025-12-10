@@ -1,13 +1,13 @@
 //
-//  LoginController.swift
+//  RegistrationController.swift
 //  Uber
 //
-//  Created by Edwin Cardenas on 12/5/25.
+//  Created by Edwin Cardenas on 12/10/25.
 //
 
 import UIKit
 
-class LoginController: UIViewController {
+class RegistrationController: UIViewController {
 
     // MARK: - Properties
 
@@ -21,6 +21,11 @@ class LoginController: UIViewController {
         return label
     }()
 
+    private let usernameTextField = DecoratedTextFieldContainerView(
+        imageResource: .icPersonOutlineWhite2X,
+        placeholder: "Full Name"
+    )
+
     private let emailTextField = DecoratedTextFieldContainerView(
         imageResource: .icMailOutlineWhite2X,
         placeholder: "Email"
@@ -31,30 +36,13 @@ class LoginController: UIViewController {
         isSecure: true
     )
 
-    private lazy var loginButton: AuthButton = {
-        let button = AuthButton(type: .system)
-
-        button.setTitle("Log In", for: .normal)
-
-        if let fontDescriptor: UIFontDescriptor = .preferredFontDescriptor(
-            withTextStyle: .body
-        ).withSymbolicTraits(.traitBold) {
-            button.titleLabel?.font = UIFont(
-                descriptor: fontDescriptor,
-                size: 0
-            )
-        }
-
-        return button
-    }()
-
-    private lazy var showRegistrationButton: UIButton = {
+    private lazy var showLoginButton: UIButton = {
         let button = UIButton(type: .system)
 
         button.translatesAutoresizingMaskIntoConstraints = false
 
         let attributedText = NSMutableAttributedString(
-            string: "Don't have an account? ",
+            string: "Already have an account? ",
             attributes: [
                 .foregroundColor: UIColor.systemGray,
                 .font: UIFont.systemFont(ofSize: 16),
@@ -63,7 +51,7 @@ class LoginController: UIViewController {
 
         attributedText.append(
             NSAttributedString(
-                string: "Sign Up",
+                string: "Sign In",
                 attributes: [
                     .foregroundColor: UIColor.systemBlue,
                     .font: UIFont.boldSystemFont(ofSize: 16),
@@ -74,7 +62,7 @@ class LoginController: UIViewController {
         button.setAttributedTitle(attributedText, for: .normal)
         button.addTarget(
             self,
-            action: #selector(showRegistrationButtonTapped),
+            action: #selector(showLoginButtonTapped),
             for: .touchUpInside
         )
 
@@ -93,14 +81,13 @@ class LoginController: UIViewController {
 
 // MARK: - Helpers
 
-extension LoginController {
+extension RegistrationController {
 
     private func setupViews() {
-        navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .systemBackground
 
         let stackView = UIStackView(arrangedSubviews: [
-            emailTextField, passwordTextField, loginButton,
+            usernameTextField, emailTextField, passwordTextField,
         ])
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -109,7 +96,7 @@ extension LoginController {
 
         view.addSubview(titleLabel)
         view.addSubview(stackView)
-        view.addSubview(showRegistrationButton)
+        view.addSubview(showLoginButton)
 
         // titleLabel
         NSLayoutConstraint.activate([
@@ -138,10 +125,10 @@ extension LoginController {
 
         // showRegistrationButton
         NSLayoutConstraint.activate([
-            showRegistrationButton.centerXAnchor.constraint(
+            showLoginButton.centerXAnchor.constraint(
                 equalTo: view.centerXAnchor
             ),
-            showRegistrationButton.bottomAnchor.constraint(
+            showLoginButton.bottomAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.bottomAnchor
             ),
         ])
@@ -149,14 +136,12 @@ extension LoginController {
 
 }
 
-// MAKR: - Actions
+// MARK: - Actions
 
-extension LoginController {
+extension RegistrationController {
 
-    @objc func showRegistrationButtonTapped(_ sender: UIButton) {
-        let controller = RegistrationController()
-
-        navigationController?.pushViewController(controller, animated: true)
+    @objc func showLoginButtonTapped(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
     }
 
 }
