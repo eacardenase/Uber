@@ -21,6 +21,16 @@ class LoginController: UIViewController {
         return label
     }()
 
+    private let emailTextField = DecoratedTextFieldContainerView(
+        imageResource: .icMailOutlineWhite2X,
+        placeholder: "Email"
+    )
+    private let passwordTextField = DecoratedTextFieldContainerView(
+        imageResource: .icLockOutlineWhite2X,
+        placeholder: "Password",
+        isSecure: true
+    )
+
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
@@ -39,7 +49,16 @@ extension LoginController {
         navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .systemBackground
 
+        let stackView = UIStackView(arrangedSubviews: [
+            emailTextField, passwordTextField,
+        ])
+
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 16
+
         view.addSubview(titleLabel)
+        view.addSubview(stackView)
 
         // titleLabel
         NSLayoutConstraint.activate([
@@ -48,6 +67,22 @@ extension LoginController {
                 constant: 16
             ),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        ])
+
+        // stackView
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(
+                equalTo: titleLabel.bottomAnchor,
+                constant: 32
+            ),
+            stackView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: 24
+            ),
+            stackView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -24
+            ),
         ])
     }
 
