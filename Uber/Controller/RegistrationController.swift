@@ -25,7 +25,6 @@ class RegistrationController: UIViewController {
         imageResource: .icPersonOutlineWhite2X,
         placeholder: "Full Name"
     )
-
     private let emailTextField = DecoratedTextFieldContainerView(
         imageResource: .icMailOutlineWhite2X,
         placeholder: "Email"
@@ -35,6 +34,24 @@ class RegistrationController: UIViewController {
         placeholder: "Password",
         isSecure: true
     )
+    private let accountTypeSegmentedView = SegmentedControlView()
+
+    private lazy var signUpButton: AuthButton = {
+        let button = AuthButton(type: .system)
+
+        button.setTitle("Sign Up", for: .normal)
+
+        if let fontDescriptor: UIFontDescriptor = .preferredFontDescriptor(
+            withTextStyle: .body
+        ).withSymbolicTraits(.traitBold) {
+            button.titleLabel?.font = UIFont(
+                descriptor: fontDescriptor,
+                size: 0
+            )
+        }
+
+        return button
+    }()
 
     private lazy var showLoginButton: UIButton = {
         let button = UIButton(type: .system)
@@ -87,7 +104,11 @@ extension RegistrationController {
         view.backgroundColor = .systemBackground
 
         let stackView = UIStackView(arrangedSubviews: [
-            usernameTextField, emailTextField, passwordTextField,
+            usernameTextField,
+            emailTextField,
+            passwordTextField,
+            accountTypeSegmentedView,
+            signUpButton,
         ])
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
