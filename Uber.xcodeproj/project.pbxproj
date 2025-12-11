@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A57479BF2EEB70E200750A59 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = A57479BE2EEB70E200750A59 /* JGProgressHUD */; };
+		A57479C22EEB717E00750A59 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A57479C12EEB717E00750A59 /* FirebaseAuth */; };
+		A57479C42EEB717E00750A59 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = A57479C32EEB717E00750A59 /* FirebaseCore */; };
+		A57479C62EEB717E00750A59 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = A57479C52EEB717E00750A59 /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		A5A571512EE21A19001C6668 /* Uber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Uber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +43,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A57479BF2EEB70E200750A59 /* JGProgressHUD in Frameworks */,
+				A57479C62EEB717E00750A59 /* FirebaseFirestore in Frameworks */,
+				A57479C42EEB717E00750A59 /* FirebaseCore in Frameworks */,
+				A57479C22EEB717E00750A59 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +89,10 @@
 			);
 			name = Uber;
 			packageProductDependencies = (
+				A57479BE2EEB70E200750A59 /* JGProgressHUD */,
+				A57479C12EEB717E00750A59 /* FirebaseAuth */,
+				A57479C32EEB717E00750A59 /* FirebaseCore */,
+				A57479C52EEB717E00750A59 /* FirebaseFirestore */,
 			);
 			productName = Uber;
 			productReference = A5A571512EE21A19001C6668 /* Uber.app */;
@@ -107,6 +122,10 @@
 			);
 			mainGroup = A5A571482EE21A19001C6668;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A57479BD2EEB70E200750A59 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
+				A57479C02EEB717E00750A59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A5A571522EE21A19001C6668 /* Products */;
 			projectDirPath = "";
@@ -345,6 +364,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A57479BD2EEB70E200750A59 /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.0;
+			};
+		};
+		A57479C02EEB717E00750A59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A57479BE2EEB70E200750A59 /* JGProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57479BD2EEB70E200750A59 /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
+			productName = JGProgressHUD;
+		};
+		A57479C12EEB717E00750A59 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57479C02EEB717E00750A59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		A57479C32EEB717E00750A59 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57479C02EEB717E00750A59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		A57479C52EEB717E00750A59 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57479C02EEB717E00750A59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A5A571492EE21A19001C6668 /* Project object */;
 }
