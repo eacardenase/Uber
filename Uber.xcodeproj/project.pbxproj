@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A574791C2EEB59C800750A59 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A57479102EEB59C800750A59 /* README.md */; };
 		A57479BF2EEB70E200750A59 /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = A57479BE2EEB70E200750A59 /* JGProgressHUD */; };
 		A57479C22EEB717E00750A59 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A57479C12EEB717E00750A59 /* FirebaseAuth */; };
 		A57479C42EEB717E00750A59 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = A57479C32EEB717E00750A59 /* FirebaseCore */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A57479102EEB59C800750A59 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A5A571512EE21A19001C6668 /* Uber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Uber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -58,6 +60,7 @@
 			children = (
 				A5A571532EE21A19001C6668 /* Uber */,
 				A5A571522EE21A19001C6668 /* Products */,
+				A57479102EEB59C800750A59 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -141,6 +144,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A574791C2EEB59C800750A59 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
