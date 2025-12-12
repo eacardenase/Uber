@@ -11,6 +11,9 @@ class LoginController: UIViewController {
 
     // MARK: - Properties
 
+    private var viewModel = LoginViewModel()
+    weak var delegate: AuthenticationDelegate?
+
     private let titleLabel: UILabel = {
         let label = UILabel()
 
@@ -21,11 +24,11 @@ class LoginController: UIViewController {
         return label
     }()
 
-    private let emailTextField = DecoratedTextFieldContainerView(
+    private let emailTextField = DecoratedTextField(
         imageResource: .icMailOutlineWhite2X,
         placeholder: "Email"
     )
-    private let passwordTextField = DecoratedTextFieldContainerView(
+    private let passwordTextField = DecoratedTextField(
         imageResource: .icLockOutlineWhite2X,
         placeholder: "Password",
         isSecure: true
@@ -35,6 +38,11 @@ class LoginController: UIViewController {
         let button = AuthButton(type: .system)
 
         button.setTitle("Log In", for: .normal)
+        button.addTarget(
+            self,
+            action: #selector(loginButtonTapped),
+            for: .touchUpInside
+        )
 
         if let fontDescriptor: UIFontDescriptor = .preferredFontDescriptor(
             withTextStyle: .body
@@ -87,6 +95,9 @@ class LoginController: UIViewController {
         super.viewDidLoad()
 
         setupViews()
+
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
     }
 
 }
@@ -153,10 +164,69 @@ extension LoginController {
 
 extension LoginController {
 
+    @objc func loginButtonTapped(_ sender: UIButton) {
+        guard let email = viewModel.email,
+            let password = viewModel.password
+        else { return }
+
+        AuthService.logUserIn(withEmail: email, password: password) {
+            [weak self] error in
+
+            guard let self else { return }
+
+            if let error {
+                let alertController = UIAlertController(
+                    title: "Error",
+                    message: error.localizedDescription,
+                    preferredStyle: .alert
+                )
+
+                alertController.addAction(
+                    UIAlertAction(title: "OK", style: .default)
+                )
+
+                self.present(alertController, animated: true)
+
+                return
+            }
+
+            self.delegate?.authenticationComplete()
+        }
+    }
+
     @objc func showRegistrationButtonTapped(_ sender: UIButton) {
         let controller = RegistrationController()
+        controller.delegate = delegate
 
         navigationController?.pushViewController(controller, animated: true)
+    }
+
+}
+
+// MARK: - PasswordTextFieldDelegate
+
+extension LoginController: DecoratedTextFieldDelegate {
+
+    func editingChanged(_ sender: DecoratedTextField) {
+        if sender === emailTextField {
+            viewModel.email = sender.text
+        } else {
+            viewModel.password = sender.text
+        }
+
+        updateForm()
+    }
+
+}
+
+// MARK: - AuthenticationControllerProtocol
+
+extension LoginController: AuthenticationProtocol {
+
+    func updateForm() {
+        loginButton.isEnabled = viewModel.shouldEnableButton
+        loginButton.backgroundColor = viewModel.buttonBackgroundColor
+        loginButton.setTitleColor(viewModel.buttonTitleColor, for: .normal)
     }
 
 }

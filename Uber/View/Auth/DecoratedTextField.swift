@@ -7,9 +7,17 @@
 
 import UIKit
 
-class DecoratedTextFieldContainerView: UIView {
+protocol DecoratedTextFieldDelegate: AnyObject {
+
+    func editingChanged(_ sender: DecoratedTextField)
+
+}
+
+class DecoratedTextField: UIView {
 
     // MARK: - Properties
+
+    weak var delegate: DecoratedTextFieldDelegate?
 
     private let imageView: UIImageView = {
         let _imageView = UIImageView()
@@ -22,7 +30,7 @@ class DecoratedTextFieldContainerView: UIView {
         return _imageView
     }()
 
-    private let textField: UITextField = {
+    private lazy var textField: UITextField = {
         let _textField = UITextField()
 
         _textField.translatesAutoresizingMaskIntoConstraints = false
@@ -31,6 +39,11 @@ class DecoratedTextFieldContainerView: UIView {
         _textField.textColor = .label
         _textField.keyboardAppearance = .dark
         _textField.autocapitalizationType = .none
+        _textField.addTarget(
+            self,
+            action: #selector(textFieldEditingChanged),
+            for: .editingChanged
+        )
 
         return _textField
     }()
@@ -44,6 +57,20 @@ class DecoratedTextFieldContainerView: UIView {
         return view
     }()
 
+    var text: String? {
+        return textField.text
+    }
+
+    var autocapitalizationType: UITextAutocapitalizationType {
+        get { textField.autocapitalizationType }
+        set { textField.autocapitalizationType = newValue }
+    }
+
+    var keyboardType: UIKeyboardType {
+        get { textField.keyboardType }
+        set { textField.keyboardType = newValue }
+    }
+
     // MARK: - Initializers
 
     init(
@@ -51,6 +78,8 @@ class DecoratedTextFieldContainerView: UIView {
         placeholder: String,
         isSecure: Bool = false
     ) {
+        super.init(frame: .zero)
+
         imageView.image = UIImage(resource: imageResource)
             .withRenderingMode(.alwaysTemplate)
 
@@ -62,8 +91,6 @@ class DecoratedTextFieldContainerView: UIView {
                 .font: UIFont.preferredFont(forTextStyle: .body),
             ]
         )
-
-        super.init(frame: .zero)
 
         setupViews()
     }
@@ -80,7 +107,7 @@ class DecoratedTextFieldContainerView: UIView {
 
 // MARK: - Helpers
 
-extension DecoratedTextFieldContainerView {
+extension DecoratedTextField {
 
     private func setupViews() {
         translatesAutoresizingMaskIntoConstraints = false
@@ -119,6 +146,16 @@ extension DecoratedTextFieldContainerView {
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             dividerView.heightAnchor.constraint(equalToConstant: 2),
         ])
+    }
+
+}
+
+// MARK: - Actions
+
+extension DecoratedTextField {
+
+    @objc func textFieldEditingChanged(_ sender: UITextField) {
+        delegate?.editingChanged(self)
     }
 
 }
