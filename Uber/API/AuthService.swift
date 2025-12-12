@@ -16,6 +16,7 @@ struct AuthCredentials {
     let fullname: String
     let email: String
     let password: String
+    let accountType: AccountType
 }
 
 struct AuthService {
@@ -51,6 +52,7 @@ struct AuthService {
                 uid: uid,
                 fullname: credentials.fullname,
                 email: credentials.email,
+                accountType: credentials.accountType
             )
 
             UserService.store(

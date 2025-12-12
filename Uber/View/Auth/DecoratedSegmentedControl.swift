@@ -1,5 +1,5 @@
 //
-//  SegmentedControlView.swift
+//  DecoratedSegmentedControl.swift
 //  Uber
 //
 //  Created by Edwin Cardenas on 12/11/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SegmentedControlView: UIView {
+class DecoratedSegmentedControl: UIView {
 
     // MARK: - Properties
 
@@ -30,6 +30,10 @@ class SegmentedControlView: UIView {
         return view
     }()
 
+    var selectedSegmentIndex: Int {
+        return segmentedControl.selectedSegmentIndex
+    }
+
     // MARK: - Initializers
 
     override init(frame: CGRect) {
@@ -50,7 +54,7 @@ class SegmentedControlView: UIView {
 
 // MARK: - Helpers
 
-extension SegmentedControlView {
+extension DecoratedSegmentedControl {
 
     private func setupViews() {
         translatesAutoresizingMaskIntoConstraints = false

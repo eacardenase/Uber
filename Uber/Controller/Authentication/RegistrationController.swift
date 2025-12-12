@@ -51,7 +51,7 @@ class RegistrationController: UIViewController {
         placeholder: "Password",
         isSecure: true
     )
-    private let accountTypeSegmentedView = SegmentedControlView()
+    private let accountTypeSegmentedView = DecoratedSegmentedControl()
 
     private lazy var signUpButton: AuthButton = {
         let button = AuthButton(type: .system)
@@ -190,13 +190,17 @@ extension RegistrationController {
     @objc func signUpButtonTapped(_ sender: UIButton) {
         guard let fullname = viewModel.fullname,
             let email = viewModel.email,
-            let password = viewModel.password
+            let password = viewModel.password,
+            let accountType = AccountType(
+                rawValue: accountTypeSegmentedView.selectedSegmentIndex
+            )
         else { return }
 
         let credentials = AuthCredentials(
             fullname: fullname,
             email: email,
-            password: password
+            password: password,
+            accountType: accountType
         )
 
         AuthService.createUser(with: credentials) { [weak self] result in
