@@ -5,6 +5,7 @@
 //  Created by Edwin Cardenas on 12/12/25.
 //
 
+import MapKit
 import UIKit
 
 class HomeController: UIViewController {
@@ -12,8 +13,22 @@ class HomeController: UIViewController {
     // MARK: - Properties
 
     private var user: User?
+    private let locationManager = CLLocationManager()
+    private lazy var mapView: MKMapView = {
+        let _mapView = MKMapView()
+
+        _mapView.showsUserLocation = true
+        _mapView.delegate = self
+        _mapView.preferredConfiguration = MKStandardMapConfiguration()
+
+        return _mapView
+    }()
 
     // MARK: - View Lifecycle
+
+    override func loadView() {
+        view = mapView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +36,8 @@ class HomeController: UIViewController {
         authenticateUser()
         // logout()
         setupViews()
+
+        locationManager.requestWhenInUseAuthorization()
     }
 
 }
@@ -30,7 +47,6 @@ class HomeController: UIViewController {
 extension HomeController {
 
     private func setupViews() {
-        view.backgroundColor = .systemPink
     }
 
     private func presentLoginController() {
@@ -73,6 +89,7 @@ extension HomeController {
             switch result {
             case .success(let user):
                 self.user = user
+                print(user)
             case .failure(let error):
                 print("DEBUG: \(error.localizedDescription)")
 
@@ -95,4 +112,18 @@ extension HomeController {
         }
     }
 
+}
+
+// MARK: - MKMapViewDelegate
+
+extension HomeController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        let region = MKCoordinateRegion(
+            center: userLocation.coordinate,
+            latitudinalMeters: 2000,
+            longitudinalMeters: 2000
+        )
+
+        mapView.setRegion(region, animated: true)
+    }
 }
