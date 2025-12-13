@@ -33,6 +33,8 @@ class HomeController: UIViewController {
         return _mapView
     }()
 
+    private let inputActivationView = LocationInputActivationView()
+
     // MARK: - View Lifecycle
 
     override func loadView() {
@@ -56,6 +58,23 @@ class HomeController: UIViewController {
 extension HomeController {
 
     private func setupViews() {
+        view.addSubview(inputActivationView)
+
+        // locationInputView
+        NSLayoutConstraint.activate([
+            inputActivationView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: 40
+            ),
+            inputActivationView.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                constant: 16
+            ),
+            inputActivationView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -16
+            ),
+        ])
     }
 
     private func presentLoginController() {
