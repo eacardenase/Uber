@@ -13,11 +13,20 @@ class HomeController: UIViewController {
     // MARK: - Properties
 
     private var user: User?
-    private let locationManager = CLLocationManager()
+
+    private lazy var locationManager: CLLocationManager = {
+        let manager = CLLocationManager()
+
+        manager.delegate = self
+
+        return manager
+    }()
+
     private lazy var mapView: MKMapView = {
         let _mapView = MKMapView()
 
         _mapView.showsUserLocation = true
+        _mapView.userTrackingMode = .follow
         _mapView.delegate = self
         _mapView.preferredConfiguration = MKStandardMapConfiguration()
 
@@ -37,7 +46,7 @@ class HomeController: UIViewController {
         // logout()
         setupViews()
 
-        locationManager.requestWhenInUseAuthorization()
+        enableLocationServices()
     }
 
 }
@@ -89,7 +98,6 @@ extension HomeController {
             switch result {
             case .success(let user):
                 self.user = user
-                print(user)
             case .failure(let error):
                 print("DEBUG: \(error.localizedDescription)")
 
@@ -117,13 +125,37 @@ extension HomeController {
 // MARK: - MKMapViewDelegate
 
 extension HomeController: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        let region = MKCoordinateRegion(
-            center: userLocation.coordinate,
-            latitudinalMeters: 2000,
-            longitudinalMeters: 2000
-        )
 
-        mapView.setRegion(region, animated: true)
+}
+
+// MARK: - Location Services
+
+extension HomeController {
+
+    private func enableLocationServices() {
+        switch locationManager.authorizationStatus {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .authorizedAlways:
+            locationManager.startUpdatingLocation()
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        case .authorizedWhenInUse:
+            locationManager.requestAlwaysAuthorization()
+        default:
+            break
+        }
     }
+
+}
+
+// MARK: - CLLocationManagerDelegate
+
+extension HomeController: CLLocationManagerDelegate {
+
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if case .authorizedWhenInUse = manager.authorizationStatus {
+            locationManager.requestAlwaysAuthorization()
+        }
+    }
+
 }

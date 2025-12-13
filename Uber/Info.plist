@@ -2,8 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Please allow us to access your location so we can find you rides nearby</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Please allow us to access your location so we can find you rides nearby</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To present and zoom in your location in the map.</string>
+	<string>Please allow us to access your location so we can find you rides nearby</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
