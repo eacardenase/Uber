@@ -62,7 +62,11 @@ class LocationInputActivationView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        layer.cornerRadius = frame.height / 2
+        let cornerRadius: CGFloat = frame.height / 2
+
+        layer.cornerRadius = cornerRadius
+
+        addShadow(withCornerRadius: cornerRadius)
     }
 
 }
@@ -108,6 +112,14 @@ extension LocationInputActivationView {
                 constant: -16
             ),
         ])
+    }
+
+    private func addShadow(withCornerRadius cornerRadius: CGFloat) {
+        layer.shadowColor = UIColor.label.cgColor
+        layer.shadowOffset = .zero
+        layer.shadowOpacity = 0.22
+        layer.shadowPath =
+            UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
     }
 
 }
