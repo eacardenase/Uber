@@ -44,6 +44,16 @@ class LocationInputView: UIView {
         return CGSize(width: UIView.noIntrinsicMetric, height: 120)
     }
 
+    // MARK: - View Lifecycle
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        layer.borderColor = UIColor.label.cgColor
+        layer.borderWidth = 1.5
+        layer.cornerRadius = 16
+    }
+
 }
 
 // MARK: - Helpers
@@ -53,10 +63,6 @@ extension LocationInputView {
     private func setupViews() {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .systemBackground
-
-        layer.borderColor = UIColor.label.cgColor
-        layer.borderWidth = 1.5
-        layer.cornerRadius = 16
 
         let stackView = UIStackView(arrangedSubviews: [
             pickupInput, dividerView, destinationInput,
