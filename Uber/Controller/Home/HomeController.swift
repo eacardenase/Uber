@@ -19,6 +19,8 @@ class HomeController: UIViewController {
         super.viewDidLoad()
 
         setupViews()
+
+        inputActivationView.delegate = self
     }
 
 }
@@ -47,6 +49,16 @@ extension HomeController {
                 constant: -16
             ),
         ])
+    }
+
+}
+
+// MARK: - LocationInputActivationViewProtocol
+
+extension HomeController: LocationInputActivationViewDelegate {
+
+    func viewWantsToPresentLocationInput(_ view: LocationInputActivationView) {
+        print(#function)
     }
 
 }

@@ -7,9 +7,19 @@
 
 import UIKit
 
+protocol LocationInputActivationViewDelegate: AnyObject {
+
+    func viewWantsToPresentLocationInput(
+        _ view: LocationInputActivationView
+    )
+
+}
+
 class LocationInputActivationView: UIView {
 
     // MARK: - Properties
+
+    weak var delegate: LocationInputActivationViewDelegate?
 
     private let imageView: UIImageView = {
         let image = UIImage(
@@ -51,6 +61,13 @@ class LocationInputActivationView: UIView {
         super.init(frame: frame)
 
         setupViews()
+
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(presentLocationInputView)
+        )
+
+        addGestureRecognizer(tapGesture)
     }
 
     required init?(coder: NSCoder) {
@@ -62,11 +79,7 @@ class LocationInputActivationView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let cornerRadius: CGFloat = frame.height / 2
-
-        layer.cornerRadius = cornerRadius
-
-        addShadow(withCornerRadius: cornerRadius)
+        layer.cornerRadius = frame.height / 2
     }
 
 }
@@ -114,12 +127,14 @@ extension LocationInputActivationView {
         ])
     }
 
-    private func addShadow(withCornerRadius cornerRadius: CGFloat) {
-        layer.shadowColor = UIColor.label.cgColor
-        layer.shadowOffset = .zero
-        layer.shadowOpacity = 0.22
-        layer.shadowPath =
-            UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
+}
+
+// MARK: - Actions
+
+extension LocationInputActivationView {
+
+    @objc func presentLocationInputView(_ sender: UITapGestureRecognizer) {
+        delegate?.viewWantsToPresentLocationInput(self)
     }
 
 }
