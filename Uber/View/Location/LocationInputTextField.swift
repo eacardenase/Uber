@@ -44,7 +44,7 @@ class LocationInputTextField: UIView {
             string: placeholder,
             attributes: [
                 .foregroundColor: UIColor.systemGray,
-                .font: UIFont.preferredFont(forTextStyle: .caption1),
+                .font: UIFont.preferredFont(forTextStyle: .footnote),
             ]
         )
 
