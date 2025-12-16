@@ -44,6 +44,37 @@ class LocationController: UIViewController {
 
     private let locationInputView = LocationInputView()
 
+    private let locationSelectionLabel: UILabel = {
+        let label = UILabel()
+
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Select a location"
+        label.font = .preferredFont(forTextStyle: .body)
+
+        if let fontDescriptor: UIFontDescriptor = .preferredFontDescriptor(
+            withTextStyle: .body
+        ).withSymbolicTraits(.traitBold) {
+            label.font = UIFont(descriptor: fontDescriptor, size: 0)
+        }
+
+        return label
+    }()
+
+    private lazy var tableView: UITableView = {
+        let _tableView = UITableView()
+
+        _tableView.translatesAutoresizingMaskIntoConstraints = false
+        _tableView.tableHeaderView = LocationTableViewHeader()
+        _tableView.dataSource = self
+        _tableView.delegate = self
+        _tableView.register(
+            UITableViewCell.self,
+            forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self)
+        )
+
+        return _tableView
+    }()
+
     // MARK: View Lifecycle
 
     override func viewDidLoad() {
@@ -66,6 +97,8 @@ extension LocationController {
         view.addSubview(backButton)
         view.addSubview(titleLabel)
         view.addSubview(locationInputView)
+        view.addSubview(locationSelectionLabel)
+        view.addSubview(tableView)
 
         // backButton
         NSLayoutConstraint.activate([
@@ -101,6 +134,33 @@ extension LocationController {
                 constant: -16
             ),
         ])
+
+        // locationSelectionLabel
+        NSLayoutConstraint.activate([
+            locationSelectionLabel.topAnchor.constraint(
+                equalTo: locationInputView.bottomAnchor,
+                constant: 16
+            ),
+            locationSelectionLabel.leadingAnchor.constraint(
+                equalTo: locationInputView.leadingAnchor
+            ),
+        ])
+
+        // tableView
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(
+                equalTo: locationSelectionLabel.bottomAnchor
+            ),
+            tableView.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
+            ),
+            tableView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
+            ),
+            tableView.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor
+            ),
+        ])
     }
 
 }
@@ -112,5 +172,34 @@ extension LocationController {
     @objc func backButtonTapped(_ sender: UIButton) {
         print(#function)
     }
+
+}
+
+// MARK: - UITableViewDataSource
+
+extension LocationController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)
+        -> Int
+    {
+        return 3
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: NSStringFromClass(UITableViewCell.self),
+            for: indexPath
+        )
+
+        return cell
+    }
+
+}
+
+// MARK: - UITableViewDelegate
+
+extension LocationController: UITableViewDelegate {
 
 }
