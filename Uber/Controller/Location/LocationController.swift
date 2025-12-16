@@ -68,8 +68,10 @@ class LocationController: UIViewController {
         _tableView.dataSource = self
         _tableView.delegate = self
         _tableView.register(
-            UITableViewCell.self,
-            forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self)
+            LocationSearchResultCell.self,
+            forCellReuseIdentifier: NSStringFromClass(
+                LocationSearchResultCell.self
+            )
         )
 
         return _tableView
@@ -189,7 +191,7 @@ extension LocationController: UITableViewDataSource {
         -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: NSStringFromClass(UITableViewCell.self),
+            withIdentifier: NSStringFromClass(LocationSearchResultCell.self),
             for: indexPath
         )
 
