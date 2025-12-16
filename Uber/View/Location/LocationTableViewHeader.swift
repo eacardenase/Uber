@@ -32,11 +32,20 @@ class LocationTableViewHeader: UIView {
         return _label
     }()
 
+    private let dividerView: UIView = {
+        let view = UIView()
+
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .separator
+
+        return view
+    }()
+
     // MARK: - Initializers
 
     override init(frame: CGRect) {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 60))
-//        super.init(frame: frame)
+        //        super.init(frame: frame)
 
         setupViews()
     }
@@ -54,6 +63,7 @@ extension LocationTableViewHeader {
     private func setupViews() {
         addSubview(imageView)
         addSubview(label)
+        addSubview(dividerView)
 
         // imageView
         NSLayoutConstraint.activate([
@@ -77,7 +87,18 @@ extension LocationTableViewHeader {
                 equalTo: trailingAnchor,
                 constant: -16
             ),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            label.bottomAnchor.constraint(
+                equalTo: dividerView.topAnchor,
+                constant: -8
+            ),
+        ])
+
+        // dividerView
+        NSLayoutConstraint.activate([
+            dividerView.heightAnchor.constraint(equalToConstant: 1),
+            dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            dividerView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 
