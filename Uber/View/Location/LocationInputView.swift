@@ -68,7 +68,7 @@ extension LocationInputView {
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.spacing = 6
+        stackView.spacing = 8
 
         addSubview(stackView)
         addSubview(locationIndicatorView)
