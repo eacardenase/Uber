@@ -60,11 +60,15 @@ class LocationController: UIViewController {
         return label
     }()
 
+    private let headerView = LocationTableViewHeader()
+    private let footerView = LocationTableViewFooter()
+
     private lazy var tableView: UITableView = {
         let _tableView = UITableView()
 
         _tableView.translatesAutoresizingMaskIntoConstraints = false
-        _tableView.tableHeaderView = LocationTableViewHeader()
+        _tableView.tableHeaderView = headerView
+        _tableView.tableFooterView = footerView
         _tableView.dataSource = self
         _tableView.delegate = self
         _tableView.register(
@@ -84,6 +88,44 @@ class LocationController: UIViewController {
 
         setupViews()
 
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        let width = tableView.bounds.width
+        let headerSize = headerView.systemLayoutSizeFitting(
+            CGSize(
+                width: width,
+                height: UIView.layoutFittingCompressedSize.height
+            )
+        )
+        let footerSize = footerView.systemLayoutSizeFitting(
+            CGSize(
+                width: width,
+                height: UIView.layoutFittingCompressedSize.height
+            )
+        )
+
+        if headerView.frame.height != headerSize.height {
+            headerView.frame = CGRect(
+                x: 0,
+                y: 0,
+                width: headerSize.width,
+                height: headerSize.height
+            )
+            tableView.tableHeaderView = headerView
+        }
+
+        if footerView.frame.height != footerSize.height {
+            footerView.frame = CGRect(
+                x: 0,
+                y: 0,
+                width: footerSize.width,
+                height: footerSize.height
+            )
+            tableView.tableFooterView = footerView
+        }
     }
 
 }

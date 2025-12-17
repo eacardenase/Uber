@@ -44,8 +44,7 @@ class LocationTableViewHeader: UIView {
     // MARK: - Initializers
 
     override init(frame: CGRect) {
-        super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 60))
-        //        super.init(frame: frame)
+        super.init(frame: frame)
 
         setupViews()
     }
@@ -67,7 +66,7 @@ extension LocationTableViewHeader {
 
         // imageView
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: label.firstBaselineAnchor),
+            imageView.topAnchor.constraint(equalTo: label.topAnchor),
             imageView.leadingAnchor.constraint(
                 equalTo: leadingAnchor,
                 constant: 16
@@ -78,7 +77,7 @@ extension LocationTableViewHeader {
 
         // label
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             label.leadingAnchor.constraint(
                 equalTo: imageView.trailingAnchor,
                 constant: 16
@@ -89,7 +88,7 @@ extension LocationTableViewHeader {
             ),
             label.bottomAnchor.constraint(
                 equalTo: dividerView.topAnchor,
-                constant: -8
+                constant: -16
             ),
         ])
 

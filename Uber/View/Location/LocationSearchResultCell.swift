@@ -104,8 +104,7 @@ extension LocationSearchResultCell {
         // locationImageView
         NSLayoutConstraint.activate([
             locationImageView.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: 8
+                equalTo: titleLabel.topAnchor
             ),
             locationImageView.centerXAnchor.constraint(
                 equalTo: imageTooltipLabel.centerXAnchor
