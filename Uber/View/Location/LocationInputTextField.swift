@@ -35,6 +35,11 @@ class LocationInputTextField: UIView {
             UILayoutPriority(249),
             for: .horizontal
         )
+        textField.addTarget(
+            self,
+            action: #selector(editingChanged),
+            for: .editingChanged
+        )
 
         return textField
     }()
@@ -49,6 +54,7 @@ class LocationInputTextField: UIView {
         )
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .label
+        button.isHidden = true
         button.addTarget(
             self,
             action: #selector(clearInputButtomTapped),
@@ -136,8 +142,14 @@ extension LocationInputTextField {
 
 extension LocationInputTextField {
 
+    @objc func editingChanged(_ sender: UITextField) {
+        guard let text = sender.text, !text.isEmpty else { return }
+
+        clearInputButtom.isHidden = false
+    }
+
     @objc func clearInputButtomTapped(_ sender: UIButton) {
-        print(#function)
+        inputTextField.text = ""
     }
 
 }
