@@ -224,9 +224,9 @@ extension LocationController: UITableViewDataSource {
         }
 
         switch section {
-        case .searchResults: return 3
+        case .searchResults: return 0
         case .changeSearchLocation: return 1
-        case .noResults: return 0
+        case .noResults: return 1
         }
     }
 
@@ -247,18 +247,38 @@ extension LocationController: UITableViewDataSource {
                 ),
                 for: indexPath
             )
-        case .changeSearchLocation:
-            cell = tableView.dequeueReusableCell(
-                withIdentifier: NSStringFromClass(
-                    LocationAuxiliaryCell.self
-                ),
-                for: indexPath
-            )
-        case .noResults:
-            cell = UITableViewCell()
-        }
 
-        return cell
+            return cell
+        default:
+            guard
+                let cell = tableView.dequeueReusableCell(
+                    withIdentifier: NSStringFromClass(
+                        LocationAuxiliaryCell.self
+                    ),
+                    for: indexPath
+                ) as? LocationAuxiliaryCell
+            else {
+                fatalError("Failed to initialize LocationAuxiliaryCell.")
+            }
+
+            let viewModel: LocationAuxiliaryCellViewModel
+
+            if case .changeSearchLocation = section {
+                viewModel = LocationAuxiliaryCellViewModel(
+                    imageName: "globe",
+                    titleText: "Search in a different city"
+                )
+            } else {
+                viewModel = LocationAuxiliaryCellViewModel(
+                    imageName: "magnifyingglass",
+                    titleText: "Get more results for..."
+                )
+            }
+
+            cell.viewModel = viewModel
+
+            return cell
+        }
     }
 
 }

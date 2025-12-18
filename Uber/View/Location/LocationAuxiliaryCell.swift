@@ -11,6 +11,10 @@ class LocationAuxiliaryCell: UITableViewCell {
 
     // MARK: - Properties
 
+    var viewModel: LocationAuxiliaryCellViewModel? {
+        didSet { configure() }
+    }
+
     private let imageContainer: UIView = {
         let view = UIView()
 
@@ -21,7 +25,7 @@ class LocationAuxiliaryCell: UITableViewCell {
     }()
 
     private let containerImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "globe"))
+        let imageView = UIImageView()
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
@@ -34,7 +38,6 @@ class LocationAuxiliaryCell: UITableViewCell {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Search in a different city"
         label.font = .preferredFont(forTextStyle: .headline)
 
         return label
@@ -119,6 +122,13 @@ extension LocationAuxiliaryCell {
                 equalTo: imageContainer.centerYAnchor
             ),
         ])
+    }
+
+    private func configure() {
+        guard let viewModel else { return }
+
+        containerImageView.image = UIImage(systemName: viewModel.imageName)
+        titleLabel.text = viewModel.titleText
     }
 
 }
