@@ -64,6 +64,16 @@ extension LocationTableViewHeader {
         addSubview(label)
         addSubview(dividerView)
 
+        let imageViewHeightAnchor = imageView.heightAnchor.constraint(
+            equalToConstant: 16
+        )
+        imageViewHeightAnchor.priority = .defaultHigh
+
+        let imageViewWidthAnchor = imageView.widthAnchor.constraint(
+            equalToConstant: imageViewHeightAnchor.constant
+        )
+        imageViewWidthAnchor.priority = .defaultHigh
+
         // imageView
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: label.topAnchor),
@@ -71,33 +81,42 @@ extension LocationTableViewHeader {
                 equalTo: leadingAnchor,
                 constant: 16
             ),
-            imageView.heightAnchor.constraint(equalToConstant: 16),
-            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor),
+            imageViewHeightAnchor,
+            imageViewWidthAnchor,
         ])
+
+        let labelLeadingAnchor = label.leadingAnchor.constraint(
+            equalTo: imageView.trailingAnchor,
+            constant: 16
+        )
+        labelLeadingAnchor.priority = .defaultHigh
 
         // label
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            label.leadingAnchor.constraint(
-                equalTo: imageView.trailingAnchor,
-                constant: 16
-            ),
+            labelLeadingAnchor,
             label.trailingAnchor.constraint(
                 equalTo: trailingAnchor,
                 constant: -16
             ),
-            label.bottomAnchor.constraint(
-                equalTo: dividerView.topAnchor,
-                constant: -16
-            ),
+
         ])
+
+        let dividerViewBottomConstraint = dividerView.bottomAnchor.constraint(
+            equalTo: bottomAnchor
+        )
+        dividerViewBottomConstraint.priority = .defaultHigh
 
         // dividerView
         NSLayoutConstraint.activate([
-            dividerView.heightAnchor.constraint(equalToConstant: 1),
+            dividerView.topAnchor.constraint(
+                equalTo: label.bottomAnchor,
+                constant: 16
+            ),
             dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            dividerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            dividerViewBottomConstraint,
+            dividerView.heightAnchor.constraint(equalToConstant: 1),
         ])
     }
 

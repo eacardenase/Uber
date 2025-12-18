@@ -74,6 +74,11 @@ extension LocationAuxiliaryCell {
         addSubview(containerImageView)
         addSubview(titleLabel)
 
+        let imageContainerHeightAnchor = imageContainer.heightAnchor.constraint(
+            equalToConstant: 32
+        )
+        imageContainerHeightAnchor.priority = UILayoutPriority(900)
+
         // imageContainer
         NSLayoutConstraint.activate([
             imageContainer.topAnchor.constraint(
@@ -88,9 +93,9 @@ extension LocationAuxiliaryCell {
                 equalTo: bottomAnchor,
                 constant: -8
             ),
-            imageContainer.heightAnchor.constraint(equalToConstant: 32),
+            imageContainerHeightAnchor,
             imageContainer.widthAnchor.constraint(
-                equalTo: imageContainer.heightAnchor
+                equalToConstant: imageContainerHeightAnchor.constant
             ),
         ])
 
