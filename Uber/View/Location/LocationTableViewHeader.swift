@@ -27,7 +27,6 @@ class LocationTableViewHeader: UIView {
         _label.translatesAutoresizingMaskIntoConstraints = false
         _label.text = "Saved Places"
         _label.font = .preferredFont(forTextStyle: .callout)
-        _label.setContentHuggingPriority(.required, for: .vertical)
 
         return _label
     }()
@@ -67,12 +66,12 @@ extension LocationTableViewHeader {
         let imageViewHeightAnchor = imageView.heightAnchor.constraint(
             equalToConstant: 16
         )
-        imageViewHeightAnchor.priority = .defaultHigh
+        imageViewHeightAnchor.priority = UILayoutPriority(900)
 
         let imageViewWidthAnchor = imageView.widthAnchor.constraint(
             equalToConstant: imageViewHeightAnchor.constant
         )
-        imageViewWidthAnchor.priority = .defaultHigh
+        imageViewWidthAnchor.priority = UILayoutPriority(900)
 
         // imageView
         NSLayoutConstraint.activate([
