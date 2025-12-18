@@ -30,8 +30,32 @@ class LocationInputTextField: UIView {
         let textField = UITextField()
 
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.font = .preferredFont(forTextStyle: .footnote)
+        textField.setContentHuggingPriority(
+            UILayoutPriority(249),
+            for: .horizontal
+        )
 
         return textField
+    }()
+
+    private lazy var clearInputButtom: UIButton = {
+        let button = UIButton(type: .system)
+
+        button.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        button.setImage(
+            UIImage(systemName: "xmark.circle.fill"),
+            for: .highlighted
+        )
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .label
+        button.addTarget(
+            self,
+            action: #selector(clearInputButtomTapped),
+            for: .touchUpInside
+        )
+
+        return button
     }()
 
     // MARK: - Initializers
@@ -66,6 +90,7 @@ extension LocationInputTextField {
 
         addSubview(titleLabel)
         addSubview(inputTextField)
+        addSubview(clearInputButtom)
 
         // titleLabel
         NSLayoutConstraint.activate([
@@ -82,12 +107,37 @@ extension LocationInputTextField {
             inputTextField.leadingAnchor.constraint(
                 equalTo: titleLabel.leadingAnchor
             ),
-            inputTextField.trailingAnchor.constraint(
+            inputTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
+
+        // clearInputButtom
+        NSLayoutConstraint.activate([
+            clearInputButtom.leadingAnchor.constraint(
+                equalTo: inputTextField.trailingAnchor,
+                constant: 8
+            ),
+            clearInputButtom.trailingAnchor.constraint(
                 equalTo: trailingAnchor,
                 constant: -8
             ),
-            inputTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
+            clearInputButtom.centerYAnchor.constraint(
+                equalTo: centerYAnchor
+            ),
+            clearInputButtom.heightAnchor.constraint(equalToConstant: 16),
+            clearInputButtom.widthAnchor.constraint(
+                equalTo: clearInputButtom.heightAnchor
+            ),
         ])
+    }
+
+}
+
+// MARK: - Actions
+
+extension LocationInputTextField {
+
+    @objc func clearInputButtomTapped(_ sender: UIButton) {
+        print(#function)
     }
 
 }

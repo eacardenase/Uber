@@ -193,7 +193,8 @@ extension LocationController {
         // tableView
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(
-                equalTo: locationSelectionLabel.bottomAnchor
+                equalTo: locationSelectionLabel.bottomAnchor,
+                constant: 8
             ),
             tableView.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor
