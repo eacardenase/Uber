@@ -1,5 +1,5 @@
 //
-//  LocationTableViewFooter.swift
+//  LocationAuxiliaryCell.swift
 //  Uber
 //
 //  Created by Edwin Cardenas on 12/15/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LocationTableViewFooter: UIView {
+class LocationAuxiliaryCell: UITableViewCell {
 
     // MARK: - Properties
 
@@ -20,7 +20,7 @@ class LocationTableViewFooter: UIView {
         return view
     }()
 
-    private let imageView: UIImageView = {
+    private let containerImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "globe"))
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -42,8 +42,8 @@ class LocationTableViewFooter: UIView {
 
     // MARK: - Initializers
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         setupViews()
     }
@@ -64,11 +64,11 @@ class LocationTableViewFooter: UIView {
 
 // MARK: - Helpers
 
-extension LocationTableViewFooter {
+extension LocationAuxiliaryCell {
 
     private func setupViews() {
         addSubview(imageContainer)
-        addSubview(imageView)
+        addSubview(containerImageView)
         addSubview(titleLabel)
 
         // imageContainer
@@ -93,14 +93,16 @@ extension LocationTableViewFooter {
 
         // imageView
         NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(
+            containerImageView.centerXAnchor.constraint(
                 equalTo: imageContainer.centerXAnchor
             ),
-            imageView.centerYAnchor.constraint(
+            containerImageView.centerYAnchor.constraint(
                 equalTo: imageContainer.centerYAnchor
             ),
-            imageView.heightAnchor.constraint(equalToConstant: 16),
-            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor),
+            containerImageView.heightAnchor.constraint(equalToConstant: 16),
+            containerImageView.widthAnchor.constraint(
+                equalTo: containerImageView.heightAnchor
+            ),
         ])
 
         // titleLabel

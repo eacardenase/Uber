@@ -51,7 +51,7 @@ class LocationSearchResultCell: UITableViewCell {
         return label
     }()
 
-    private let subtitleLabel: UILabel = {
+    private let addressLabel: UILabel = {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -71,6 +71,8 @@ class LocationSearchResultCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        selectionStyle = .none
+
         setupViews()
     }
 
@@ -84,9 +86,8 @@ class LocationSearchResultCell: UITableViewCell {
 extension LocationSearchResultCell {
 
     private func setupViews() {
-
         let labelStackView = UIStackView(arrangedSubviews: [
-            titleLabel, subtitleLabel,
+            titleLabel, addressLabel,
         ])
 
         labelStackView.translatesAutoresizingMaskIntoConstraints = false

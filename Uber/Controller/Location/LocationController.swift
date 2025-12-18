@@ -61,20 +61,24 @@ class LocationController: UIViewController {
     }()
 
     private let headerView = LocationTableViewHeader()
-    private let footerView = LocationTableViewFooter()
 
     private lazy var tableView: UITableView = {
         let _tableView = UITableView()
 
         _tableView.translatesAutoresizingMaskIntoConstraints = false
         _tableView.tableHeaderView = headerView
-        _tableView.tableFooterView = footerView
         _tableView.dataSource = self
         _tableView.delegate = self
         _tableView.register(
             LocationSearchResultCell.self,
             forCellReuseIdentifier: NSStringFromClass(
                 LocationSearchResultCell.self
+            )
+        )
+        _tableView.register(
+            LocationAuxiliaryCell.self,
+            forCellReuseIdentifier: NSStringFromClass(
+                LocationAuxiliaryCell.self
             )
         )
 
@@ -100,12 +104,6 @@ class LocationController: UIViewController {
                 height: UIView.layoutFittingCompressedSize.height
             )
         )
-        let footerSize = footerView.systemLayoutSizeFitting(
-            CGSize(
-                width: width,
-                height: UIView.layoutFittingCompressedSize.height
-            )
-        )
 
         if headerView.frame.height != headerSize.height {
             headerView.frame = CGRect(
@@ -115,16 +113,6 @@ class LocationController: UIViewController {
                 height: headerSize.height
             )
             tableView.tableHeaderView = headerView
-        }
-
-        if footerView.frame.height != footerSize.height {
-            footerView.frame = CGRect(
-                x: 0,
-                y: 0,
-                width: footerSize.width,
-                height: footerSize.height
-            )
-            tableView.tableFooterView = footerView
         }
     }
 
@@ -224,19 +212,51 @@ extension LocationController {
 
 extension LocationController: UITableViewDataSource {
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return LocationSections.allCases.count
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)
         -> Int
     {
-        return 3
+        guard let section = LocationSections(rawValue: section) else {
+            fatalError("Could not create LocationSections from raw value.")
+        }
+
+        switch section {
+        case .searchResults: return 3
+        case .changeSearchLocation: return 1
+        case .noResults: return 0
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
         -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: NSStringFromClass(LocationSearchResultCell.self),
-            for: indexPath
-        )
+        guard let section = LocationSections(rawValue: indexPath.section) else {
+            fatalError("Could not create LocationSections from raw value.")
+        }
+
+        let cell: UITableViewCell
+
+        switch section {
+        case .searchResults:
+            cell = tableView.dequeueReusableCell(
+                withIdentifier: NSStringFromClass(
+                    LocationSearchResultCell.self
+                ),
+                for: indexPath
+            )
+        case .changeSearchLocation:
+            cell = tableView.dequeueReusableCell(
+                withIdentifier: NSStringFromClass(
+                    LocationAuxiliaryCell.self
+                ),
+                for: indexPath
+            )
+        case .noResults:
+            cell = UITableViewCell()
+        }
 
         return cell
     }

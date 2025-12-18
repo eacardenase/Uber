@@ -31,6 +31,9 @@ class LocationInputTextField: UIView {
 
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = .preferredFont(forTextStyle: .footnote)
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
+        textField.returnKeyType = .search
         textField.setContentHuggingPriority(
             UILayoutPriority(249),
             for: .horizontal
@@ -143,13 +146,14 @@ extension LocationInputTextField {
 extension LocationInputTextField {
 
     @objc func editingChanged(_ sender: UITextField) {
-        guard let text = sender.text, !text.isEmpty else { return }
+        guard let text = sender.text else { return }
 
-        clearInputButtom.isHidden = false
+        clearInputButtom.isHidden = text.isEmpty
     }
 
     @objc func clearInputButtomTapped(_ sender: UIButton) {
         inputTextField.text = ""
+        clearInputButtom.isHidden = true
     }
 
 }
