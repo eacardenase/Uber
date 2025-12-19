@@ -1,5 +1,5 @@
 {
-  "originHash" : "1b6294a854c0b8ae144d2c42935246d51341bd89e06987cb2ab4bbbeac5a54da",
+  "originHash" : "75f456ad013cddec726736bbdcc2a1ae6e817d84c3691ae67c8eb13de1950ebc",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -26,15 +26,6 @@
       "state" : {
         "revision" : "45210bd1ea695779e6de016ab00fea8c0b7eb2ef",
         "version" : "12.7.0"
-      }
-    },
-    {
-      "identity" : "geofire-objc",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/geofire-objc",
-      "state" : {
-        "branch" : "master",
-        "revision" : "bd254cb08948dcedf5c16b51fa78852772221572"
       }
     },
     {
