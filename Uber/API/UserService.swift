@@ -5,6 +5,7 @@
 //  Created by Edwin Cardenas on 12/12/25.
 //
 
+import CoreLocation
 import FirebaseFirestore
 
 struct UserService {
@@ -22,7 +23,32 @@ struct UserService {
                 .document(user.uid)
                 .setData(from: user)
 
-            completion(.success(user))
+            guard let location = LocationManager.shared.location else {
+                completion(
+                    .failure(.serverError("Failed to get user location."))
+                )
+
+                return
+            }
+
+            let userLocation = UserLocation(
+                userId: user.uid,
+                latitude: location.coordinate.latitude.magnitude,
+                longitude: location.coordinate.longitude.magnitude
+            )
+
+            UserLocationService.store(userLocation) { error in
+                if let error {
+                    completion(
+                        .failure(error)
+                    )
+
+                    return
+                }
+
+                completion(.success(user))
+            }
+
         } catch {
             completion(.failure(.serverError(error.localizedDescription)))
         }

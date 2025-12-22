@@ -14,14 +14,6 @@ class MapController: UIViewController {
 
     private var user: User?
 
-    private lazy var locationManager: CLLocationManager = {
-        let manager = CLLocationManager()
-
-        manager.delegate = self
-
-        return manager
-    }()
-
     private lazy var mapView: MKMapView = {
         let _mapView = MKMapView()
 
@@ -42,11 +34,15 @@ class MapController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // authenticateUser()
-        logout()
+        let locationManager = LocationManager.shared
+
+        print(locationManager.location)
+
+        authenticateUser()
+        // logout()
         setupViews()
 
-        enableLocationServices()
+        LocationManager.shared.enableLocationServices()
     }
 
 }
@@ -100,7 +96,7 @@ extension MapController {
             case .success(let user):
                 self.user = user
             case .failure(let error):
-                print("DEBUG: \(error.localizedDescription)")
+                print("DEBUG: \(error)")
 
                 self.presentLoginController()
             }
@@ -126,37 +122,5 @@ extension MapController {
 // MARK: - MKMapViewDelegate
 
 extension MapController: MKMapViewDelegate {
-
-}
-
-// MARK: - Location Services
-
-extension MapController {
-
-    private func enableLocationServices() {
-        switch locationManager.authorizationStatus {
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-        case .authorizedAlways:
-            locationManager.startUpdatingLocation()
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        case .authorizedWhenInUse:
-            locationManager.requestAlwaysAuthorization()
-        default:
-            break
-        }
-    }
-
-}
-
-// MARK: - CLLocationManagerDelegate
-
-extension MapController: CLLocationManagerDelegate {
-
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        if case .authorizedWhenInUse = manager.authorizationStatus {
-            locationManager.requestAlwaysAuthorization()
-        }
-    }
 
 }
