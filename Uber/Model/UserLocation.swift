@@ -10,6 +10,7 @@ import Foundation
 struct UserLocation: Codable {
 
     let userId: String
+    let accountType: AccountType
     let latitude: Double
     let longitude: Double
 

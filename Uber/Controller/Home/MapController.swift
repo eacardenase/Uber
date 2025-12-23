@@ -37,12 +37,14 @@ class MapController: UIViewController {
         let locationManager = LocationManager.shared
 
         print(locationManager.location)
+        LocationService.fetchDriversNear(locationManager.location)
 
-        // authenticateUser()
-        logout()
+        authenticateUser()
+        // logout()
         setupViews()
 
         LocationManager.shared.enableLocationServices()
+
     }
 
 }
