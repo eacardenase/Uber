@@ -38,8 +38,8 @@ class MapController: UIViewController {
 
         print(locationManager.location)
 
-        authenticateUser()
-        // logout()
+        // authenticateUser()
+        logout()
         setupViews()
 
         LocationManager.shared.enableLocationServices()
