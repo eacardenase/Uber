@@ -64,6 +64,17 @@ struct LocationService {
         let minLatitudeRange = latitude - range.latitude
         let maxLatitudeRange = latitude + range.latitude
 
+        print(
+            """
+            Query: .order(by: "longitude")
+            .whereField("accountType", isEqualTo: 1)
+            .whereField("longitude", isGreaterThanOrEqualTo: \(minLongitudeRange))
+            .whereField("longitude", isLessThanOrEqualTo: \(maxLongitudeRange))
+            .whereField("latitude", isGreaterThanOrEqualTo: \(minLatitudeRange))
+            .whereField("latitude", isLessThanOrEqualTo: \(maxLatitudeRange))
+            """
+        )
+
         Firestore.firestore().collection("user-locations")
             .order(by: "longitude")
             .whereField("accountType", isEqualTo: 1)
