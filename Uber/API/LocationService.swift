@@ -43,10 +43,13 @@ struct LocationService {
         }
     }
 
-    static func fetchDriversNear(_ location: CLLocation?) {
+    static func fetchDriversNear(
+        _ location: CLLocation?,
+        completion: @escaping (Result<[UserLocation], NetworkingError>) -> Void
+    ) {
         guard let location else { return }
 
-        let maxDistanceKm: Double = 100
+        let maxDistanceKm: Double = 50
         let kmPerDegreeLatitude = 110.574
         let kmPerDegreeLongitude = 111.32
 
@@ -83,7 +86,29 @@ struct LocationService {
             .whereField("latitude", isGreaterThanOrEqualTo: minLatitudeRange)
             .whereField("latitude", isLessThanOrEqualTo: maxLatitudeRange)
             .getDocuments { snapshot, error in
-                print(snapshot?.documents)
+                if let error {
+                    completion(
+                        .failure(.serverError(error.localizedDescription))
+                    )
+
+                    return
+                }
+
+                guard let snapshot else {
+                    completion(
+                        .failure(
+                            .serverError("Failed to get drivers locations.")
+                        )
+                    )
+
+                    return
+                }
+
+                let driversLocations = snapshot.documents.compactMap {
+                    try? $0.data(as: UserLocation.self)
+                }
+
+                completion(.success(driversLocations))
             }
     }
 

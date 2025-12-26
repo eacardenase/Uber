@@ -34,17 +34,13 @@ class MapController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let locationManager = LocationManager.shared
-
-        print(locationManager.location)
-        LocationService.fetchDriversNear(locationManager.location)
-
         authenticateUser()
         // logout()
         setupViews()
 
         LocationManager.shared.enableLocationServices()
 
+        fetchDrivers()
     }
 
 }
@@ -116,6 +112,16 @@ extension MapController {
             }
 
             self.presentLoginController()
+        }
+    }
+
+    private func fetchDrivers() {
+        let locationManager = LocationManager.shared
+
+        print(locationManager.location)
+
+        LocationService.fetchDriversNear(locationManager.location) { result in
+            print(result)
         }
     }
 
