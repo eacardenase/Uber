@@ -121,7 +121,24 @@ extension MapController {
         print(locationManager.location)
 
         LocationService.fetchDriversNear(locationManager.location) { result in
-            print(result)
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let locations):
+                let driversAnnotations = locations.map { location in
+                    let coordinate = CLLocationCoordinate2D(
+                        latitude: location.latitude,
+                        longitude: location.longitude
+                    )
+
+                    return DriverAnnotation(
+                        uid: location.userId,
+                        coordinate: coordinate
+                    )
+                }
+
+                self.mapView.addAnnotations(driversAnnotations)
+            }
         }
     }
 
