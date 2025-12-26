@@ -13,6 +13,7 @@ class MapController: UIViewController {
     // MARK: - Properties
 
     private var user: User?
+    private var currentAnnotations = [DriverAnnotation]()
 
     private lazy var mapView: MKMapView = {
         let _mapView = MKMapView()
@@ -137,7 +138,10 @@ extension MapController {
                     )
                 }
 
+                self.mapView.removeAnnotations(self.currentAnnotations)
                 self.mapView.addAnnotations(driversAnnotations)
+
+                self.currentAnnotations = driversAnnotations
             }
         }
     }

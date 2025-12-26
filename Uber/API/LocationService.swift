@@ -67,49 +67,49 @@ struct LocationService {
         let minLatitudeRange = latitude - range.latitude
         let maxLatitudeRange = latitude + range.latitude
 
-        print(
-            """
-            Query: .order(by: "longitude")
-            .whereField("accountType", isEqualTo: 1)
-            .whereField("longitude", isGreaterThanOrEqualTo: \(minLongitudeRange))
-            .whereField("longitude", isLessThanOrEqualTo: \(maxLongitudeRange))
-            .whereField("latitude", isGreaterThanOrEqualTo: \(minLatitudeRange))
-            .whereField("latitude", isLessThanOrEqualTo: \(maxLatitudeRange))
-            """
-        )
+        var driversLocations = [String: UserLocation]()
 
-        Firestore.firestore().collection("user-locations")
+        let query = Firestore.firestore().collection("user-locations")
             .order(by: "longitude")
             .whereField("accountType", isEqualTo: 1)
             .whereField("longitude", isGreaterThanOrEqualTo: minLongitudeRange)
             .whereField("longitude", isLessThanOrEqualTo: maxLongitudeRange)
             .whereField("latitude", isGreaterThanOrEqualTo: minLatitudeRange)
             .whereField("latitude", isLessThanOrEqualTo: maxLatitudeRange)
-            .getDocuments { snapshot, error in
-                if let error {
+
+        query.addSnapshotListener { snapshot, error in
+            if let error {
+                completion(
+                    .failure(.serverError(error.localizedDescription))
+                )
+
+                return
+            }
+
+            guard let snapshot else {
+                completion(
+                    .failure(
+                        .serverError("Failed to get drivers locations.")
+                    )
+                )
+
+                return
+            }
+
+            snapshot.documents.forEach { document in
+                do {
+                    let location = try document.data(as: UserLocation.self)
+
+                    driversLocations[location.userId] = location
+
+                    completion(.success(Array(driversLocations.values)))
+                } catch {
                     completion(
                         .failure(.serverError(error.localizedDescription))
                     )
-
-                    return
                 }
-
-                guard let snapshot else {
-                    completion(
-                        .failure(
-                            .serverError("Failed to get drivers locations.")
-                        )
-                    )
-
-                    return
-                }
-
-                let driversLocations = snapshot.documents.compactMap {
-                    try? $0.data(as: UserLocation.self)
-                }
-
-                completion(.success(driversLocations))
             }
+        }
     }
 
 }
