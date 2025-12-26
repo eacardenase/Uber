@@ -152,4 +152,21 @@ extension MapController {
 
 extension MapController: MKMapViewDelegate {
 
+    func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation)
+        -> MKAnnotationView?
+    {
+        guard let annotation = annotation as? DriverAnnotation else {
+            return nil
+        }
+
+        let view = MKAnnotationView(
+            annotation: annotation,
+            reuseIdentifier: NSStringFromClass(DriverAnnotation.self)
+        )
+
+        view.image = UIImage(systemName: "car.fill")
+
+        return view
+    }
+
 }
