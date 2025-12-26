@@ -71,6 +71,39 @@ extension MapController {
         }
     }
 
+    private func updateAnnotationsCoordinates(for locations: [UserLocation]) {
+        for location in locations {
+            let coordinate = CLLocationCoordinate2D(
+                latitude: location.latitude,
+                longitude: location.longitude
+            )
+
+            let driverAnnotation = DriverAnnotation(
+                uid: location.userId,
+                coordinate: coordinate
+            )
+
+            let driverVisible = self.mapView.annotations.contains {
+                mapAnnotation in
+
+                guard let mapAnnotation = mapAnnotation as? DriverAnnotation
+                else { return false }
+
+                if mapAnnotation.uid == location.userId {
+                    mapAnnotation.updatePosition(with: coordinate)
+
+                    return true
+                }
+
+                return false
+            }
+
+            if !driverVisible {
+                self.mapView.addAnnotation(driverAnnotation)
+            }
+        }
+    }
+
 }
 
 // MARK: - AuthenticationDelegate
@@ -124,36 +157,7 @@ extension MapController {
             case .failure(let error):
                 print(error)
             case .success(let locations):
-                locations.forEach { location in
-                    let coordinate = CLLocationCoordinate2D(
-                        latitude: location.latitude,
-                        longitude: location.longitude
-                    )
-
-                    let driverAnnotation = DriverAnnotation(
-                        uid: location.userId,
-                        coordinate: coordinate
-                    )
-
-                    let driverVisible = self.mapView.annotations.contains {
-                        annotation in
-
-                        guard let annotation = annotation as? DriverAnnotation
-                        else { return false }
-
-                        if annotation.uid == location.userId {
-                            annotation.updatePosition(with: coordinate)
-
-                            return true
-                        }
-
-                        return false
-                    }
-
-                    if !driverVisible {
-                        self.mapView.addAnnotation(driverAnnotation)
-                    }
-                }
+                self.updateAnnotationsCoordinates(for: locations)
             }
         }
     }
