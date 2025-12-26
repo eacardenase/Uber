@@ -67,8 +67,6 @@ struct LocationService {
         let minLatitudeRange = latitude - range.latitude
         let maxLatitudeRange = latitude + range.latitude
 
-        var driversLocations = [String: UserLocation]()
-
         let query = Firestore.firestore().collection("user-locations")
             .order(by: "longitude")
             .whereField("accountType", isEqualTo: 1)
@@ -96,19 +94,11 @@ struct LocationService {
                 return
             }
 
-            snapshot.documents.forEach { document in
-                do {
-                    let location = try document.data(as: UserLocation.self)
-
-                    driversLocations[location.userId] = location
-
-                    completion(.success(Array(driversLocations.values)))
-                } catch {
-                    completion(
-                        .failure(.serverError(error.localizedDescription))
-                    )
-                }
+            let driversLocations = snapshot.documents.compactMap {
+                try? $0.data(as: UserLocation.self)
             }
+
+            completion(.success(driversLocations))
         }
     }
 
