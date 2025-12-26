@@ -119,29 +119,41 @@ extension MapController {
     private func fetchDrivers() {
         let locationManager = LocationManager.shared
 
-        print(locationManager.location)
-
         LocationService.fetchDriversNear(locationManager.location) { result in
             switch result {
             case .failure(let error):
                 print(error)
             case .success(let locations):
-                let driversAnnotations = locations.map { location in
+                locations.forEach { location in
                     let coordinate = CLLocationCoordinate2D(
                         latitude: location.latitude,
                         longitude: location.longitude
                     )
 
-                    return DriverAnnotation(
+                    let driverAnnotation = DriverAnnotation(
                         uid: location.userId,
                         coordinate: coordinate
                     )
+
+                    let driverVisible = self.mapView.annotations.contains {
+                        annotation in
+
+                        guard let annotation = annotation as? DriverAnnotation
+                        else { return false }
+
+                        if annotation.uid == location.userId {
+                            annotation.updatePosition(with: coordinate)
+
+                            return true
+                        }
+
+                        return false
+                    }
+
+                    if !driverVisible {
+                        self.mapView.addAnnotation(driverAnnotation)
+                    }
                 }
-
-                self.mapView.removeAnnotations(self.currentAnnotations)
-                self.mapView.addAnnotations(driversAnnotations)
-
-                self.currentAnnotations = driversAnnotations
             }
         }
     }
