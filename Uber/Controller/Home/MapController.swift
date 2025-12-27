@@ -31,7 +31,19 @@ class MapController: UIViewController {
     // MARK: - View Lifecycle
 
     override func loadView() {
-        view = mapView
+        view = UIView()
+
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(mapView)
+
+        // mapView
+        NSLayoutConstraint.activate([
+            mapView.topAnchor.constraint(equalTo: view.topAnchor),
+            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
     }
 
     override func viewDidLoad() {
