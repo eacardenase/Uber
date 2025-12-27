@@ -15,6 +15,8 @@ class MapController: UIViewController {
     private var user: User?
     private var currentAnnotations = [DriverAnnotation]()
 
+    private let locationController = LocationController()
+
     private lazy var mapView: MKMapView = {
         let _mapView = MKMapView()
 
@@ -51,7 +53,12 @@ class MapController: UIViewController {
 extension MapController {
 
     private func setupViews() {
+        locationController.view.frame = view.bounds
 
+        addChild(locationController)
+        view.addSubview(locationController.view)
+
+        locationController.didMove(toParent: self)
     }
 
     private func presentLoginController() {
