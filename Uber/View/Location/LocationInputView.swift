@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol LocationInputViewDelegate: LocationInputTextFieldDelegate {
+
+}
+
 class LocationInputView: UIView {
 
     // MARK: - Properties
+
+    weak var delegate: LocationInputTextFieldDelegate?
 
     private let locationIndicatorView = LocationIndicatorView()
 
@@ -34,6 +40,9 @@ class LocationInputView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        pickupInput.delegate = self
+        destinationInput.delegate = self
 
         setupViews()
     }
@@ -102,6 +111,16 @@ extension LocationInputView {
                 constant: -8
             ),
         ])
+    }
+
+}
+
+// MARK: - LocationInputTextFieldDelegate
+
+extension LocationInputView: LocationInputTextFieldDelegate {
+
+    func executeSearch(for query: String) {
+        delegate?.executeSearch(for: query)
     }
 
 }

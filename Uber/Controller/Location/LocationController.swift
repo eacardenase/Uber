@@ -5,6 +5,7 @@
 //  Created by Edwin Cardenas on 12/13/25.
 //
 
+import MapKit
 import UIKit
 
 class LocationController: UIViewController {
@@ -90,8 +91,9 @@ class LocationController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupViews()
+        locationInputView.delegate = self
 
+        setupViews()
     }
 
     override func viewDidLayoutSubviews() {
@@ -196,6 +198,35 @@ extension LocationController {
         ])
     }
 
+    private func searchBy(
+        naturalLanguageQuery query: String,
+        completion: @escaping ([MKPlacemark]) -> Void
+    ) {
+        var searchResults = [MKPlacemark]()
+        let request = MKLocalSearch.Request(naturalLanguageQuery: query)
+        let search = MKLocalSearch(request: request)
+
+        search.start { response, error in
+            if let error {
+                print(
+                    "DEBUG: Failed to search for \(query) with error: \(error.localizedDescription)"
+                )
+
+                return
+            }
+
+            guard let response else {
+                print("DEBUG: Failed to load search response.")
+
+                return
+            }
+
+            response.mapItems.forEach { searchResults.append($0.placemark) }
+
+            completion(searchResults)
+        }
+    }
+
 }
 
 // MARK: - Actions
@@ -224,7 +255,7 @@ extension LocationController: UITableViewDataSource {
         }
 
         switch section {
-        case .searchResults: return 0
+        case .searchResults: return 3
         case .changeSearchLocation: return 1
         case .noResults: return 1
         }
@@ -286,5 +317,21 @@ extension LocationController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension LocationController: UITableViewDelegate {
+
+}
+
+// MARK: - LocationInputViewDelegate
+
+extension LocationController: LocationInputViewDelegate {
+
+    func executeSearch(for query: String) {
+        searchBy(naturalLanguageQuery: query) { items in
+            print(items.count)
+
+            for item in items {
+                print(item.name)
+            }
+        }
+    }
 
 }

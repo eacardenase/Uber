@@ -7,9 +7,17 @@
 
 import UIKit
 
+protocol LocationInputTextFieldDelegate: AnyObject {
+
+    func executeSearch(for query: String)
+
+}
+
 class LocationInputTextField: UIView {
 
     // MARK: - Properties
+
+    weak var delegate: LocationInputTextFieldDelegate?
 
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -30,8 +38,8 @@ class LocationInputTextField: UIView {
         let textField = UITextField()
 
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.delegate = self
         textField.font = .preferredFont(forTextStyle: .footnote)
-        textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
         textField.returnKeyType = .search
         textField.setContentHuggingPriority(
@@ -154,6 +162,20 @@ extension LocationInputTextField {
     @objc func clearInputButtomTapped(_ sender: UIButton) {
         inputTextField.text = ""
         clearInputButtom.isHidden = true
+    }
+
+}
+
+// MARK: - UITextFieldDelegate
+
+extension LocationInputTextField: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let query = textField.text, !query.isEmpty else { return false }
+
+        delegate?.executeSearch(for: query)
+
+        return true
     }
 
 }
