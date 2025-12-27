@@ -65,6 +65,7 @@ class MapController: UIViewController {
 extension MapController {
 
     private func setupViews() {
+        locationController.region = mapView.region
         locationController.view.frame = view.bounds
 
         addChild(locationController)

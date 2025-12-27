@@ -12,6 +12,17 @@ class LocationController: UIViewController {
 
     // MARK: - Properties
 
+    var region: MKCoordinateRegion?
+
+    private lazy var searchCompleter: MKLocalSearchCompleter = {
+        let completer = MKLocalSearchCompleter()
+
+        completer.delegate = self
+        completer.regionPriority = .required
+
+        return completer
+    }()
+
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
 
@@ -198,35 +209,6 @@ extension LocationController {
         ])
     }
 
-    private func searchBy(
-        naturalLanguageQuery query: String,
-        completion: @escaping ([MKPlacemark]) -> Void
-    ) {
-        var searchResults = [MKPlacemark]()
-        let request = MKLocalSearch.Request(naturalLanguageQuery: query)
-        let search = MKLocalSearch(request: request)
-
-        search.start { response, error in
-            if let error {
-                print(
-                    "DEBUG: Failed to search for \(query) with error: \(error.localizedDescription)"
-                )
-
-                return
-            }
-
-            guard let response else {
-                print("DEBUG: Failed to load search response.")
-
-                return
-            }
-
-            response.mapItems.forEach { searchResults.append($0.placemark) }
-
-            completion(searchResults)
-        }
-    }
-
 }
 
 // MARK: - Actions
@@ -325,13 +307,26 @@ extension LocationController: UITableViewDelegate {
 extension LocationController: LocationInputViewDelegate {
 
     func executeSearch(for query: String) {
-        searchBy(naturalLanguageQuery: query) { items in
-            print(items.count)
+        searchCompleter.queryFragment = query
+    }
 
-            for item in items {
-                print(item.name)
-            }
+}
+
+// MARK: - MKLocalSearchCompleterDelegate
+
+extension LocationController: MKLocalSearchCompleterDelegate {
+
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        for result in completer.results {
+            print(result)
         }
+    }
+
+    func completer(
+        _ completer: MKLocalSearchCompleter,
+        didFailWithError error: any Error
+    ) {
+        print(error)
     }
 
 }
