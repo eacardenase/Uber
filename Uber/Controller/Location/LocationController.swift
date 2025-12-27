@@ -18,7 +18,6 @@ class LocationController: UIViewController {
         let completer = MKLocalSearchCompleter()
 
         completer.delegate = self
-        completer.regionPriority = .required
 
         return completer
     }()

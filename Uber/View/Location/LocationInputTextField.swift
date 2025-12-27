@@ -34,6 +34,12 @@ class LocationInputTextField: UIView {
         return label
     }()
 
+    var text: String? {
+        didSet {
+            inputTextField.text = text
+        }
+    }
+
     private lazy var inputTextField: UITextField = {
         let textField = UITextField()
 
@@ -169,6 +175,20 @@ extension LocationInputTextField {
 // MARK: - UITextFieldDelegate
 
 extension LocationInputTextField: UITextFieldDelegate {
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        guard textField.text?.isEmpty == false else { return }
+
+        DispatchQueue.main.async {
+            self.clearInputButtom.isHidden = false
+
+            textField.selectAll(nil)
+        }
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        clearInputButtom.isHidden = true
+    }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let query = textField.text, !query.isEmpty else { return false }
