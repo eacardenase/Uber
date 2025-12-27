@@ -160,7 +160,7 @@ extension LoginController {
 
 }
 
-// MAKR: - Actions
+// MARK: - Actions
 
 extension LoginController {
 

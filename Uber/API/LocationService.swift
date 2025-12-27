@@ -27,8 +27,8 @@ struct LocationService {
         let userLocation = UserLocation(
             userId: user.uid,
             accountType: user.accountType,
-            latitude: location.coordinate.latitude.magnitude,
-            longitude: location.coordinate.longitude.magnitude
+            latitude: location.coordinate.latitude,
+            longitude: location.coordinate.longitude
         )
 
         do {
