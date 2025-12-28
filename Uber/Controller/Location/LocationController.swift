@@ -17,9 +17,7 @@ class LocationController: UIViewController {
     var queryText = ""
 
     var searchResults = [LocationSearchResultCellViewModel]() {
-        didSet {
-            tableView.reloadData()
-        }
+        didSet { tableView.reloadData() }
     }
 
     private lazy var searchCompleter: MKLocalSearchCompleter = {

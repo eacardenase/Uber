@@ -28,7 +28,7 @@ class LocationSearchResultCell: UITableViewCell {
         return _imageView
     }()
 
-    private let imageTooltipLabel: UILabel = {
+    private let distanceLabel: UILabel = {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -101,7 +101,7 @@ extension LocationSearchResultCell {
         )
 
         contentView.addSubview(locationImageView)
-        contentView.addSubview(imageTooltipLabel)
+        contentView.addSubview(distanceLabel)
         contentView.addSubview(labelStackView)
 
         // locationImageView
@@ -110,17 +110,17 @@ extension LocationSearchResultCell {
                 equalTo: titleLabel.topAnchor
             ),
             locationImageView.centerXAnchor.constraint(
-                equalTo: imageTooltipLabel.centerXAnchor
+                equalTo: distanceLabel.centerXAnchor
             ),
         ])
 
         // imageTooltipLabel
         NSLayoutConstraint.activate([
-            imageTooltipLabel.topAnchor.constraint(
+            distanceLabel.topAnchor.constraint(
                 equalTo: locationImageView.bottomAnchor,
                 constant: 2
             ),
-            imageTooltipLabel.leadingAnchor.constraint(
+            distanceLabel.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor,
                 constant: 8
             ),
@@ -133,7 +133,7 @@ extension LocationSearchResultCell {
                 constant: 8
             ),
             labelStackView.leadingAnchor.constraint(
-                equalTo: imageTooltipLabel.trailingAnchor,
+                equalTo: distanceLabel.trailingAnchor,
                 constant: 8
             ),
             labelStackView.trailingAnchor.constraint(
