@@ -14,6 +14,14 @@ class LocationController: UIViewController {
 
     var region: MKCoordinateRegion?
 
+    var queryText = ""
+
+    var searchResults = [LocationSearchResultCellViewModel]() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+
     private lazy var searchCompleter: MKLocalSearchCompleter = {
         let completer = MKLocalSearchCompleter()
 
@@ -236,9 +244,9 @@ extension LocationController: UITableViewDataSource {
         }
 
         switch section {
-        case .searchResults: return 3
+        case .searchResults: return searchResults.count
         case .changeSearchLocation: return 1
-        case .noResults: return 1
+        case .noResults: return !searchResults.isEmpty ? 1 : 0
         }
     }
 
@@ -249,16 +257,20 @@ extension LocationController: UITableViewDataSource {
             fatalError("Could not create LocationSections from raw value.")
         }
 
-        let cell: UITableViewCell
-
         switch section {
         case .searchResults:
-            cell = tableView.dequeueReusableCell(
-                withIdentifier: NSStringFromClass(
-                    LocationSearchResultCell.self
-                ),
-                for: indexPath
-            )
+            guard
+                let cell = tableView.dequeueReusableCell(
+                    withIdentifier: NSStringFromClass(
+                        LocationSearchResultCell.self
+                    ),
+                    for: indexPath
+                ) as? LocationSearchResultCell
+            else {
+                fatalError("Failed to initialize LocationSearchResultCell.")
+            }
+
+            cell.viewModel = searchResults[indexPath.row]
 
             return cell
         default:
@@ -283,7 +295,7 @@ extension LocationController: UITableViewDataSource {
             } else {
                 viewModel = LocationAuxiliaryCellViewModel(
                     imageName: "magnifyingglass",
-                    titleText: "Get more results for..."
+                    titleText: "Get more results for \(queryText)"
                 )
             }
 
@@ -306,7 +318,12 @@ extension LocationController: UITableViewDelegate {
 extension LocationController: LocationInputViewDelegate {
 
     func executeSearch(for query: String) {
+        queryText = query
         searchCompleter.queryFragment = query
+    }
+
+    func inputTextFieldWantsToClearText() {
+        searchResults = []
     }
 
 }
@@ -316,8 +333,8 @@ extension LocationController: LocationInputViewDelegate {
 extension LocationController: MKLocalSearchCompleterDelegate {
 
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        for result in completer.results {
-            print(result)
+        searchResults = completer.results.map {
+            LocationSearchResultCellViewModel(completion: $0)
         }
     }
 

@@ -139,4 +139,8 @@ extension LocationInputView: LocationInputTextFieldDelegate {
         delegate?.executeSearch(for: query)
     }
 
+    func inputTextFieldWantsToClearText() {
+        delegate?.inputTextFieldWantsToClearText()
+    }
+
 }

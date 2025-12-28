@@ -11,11 +11,15 @@ class LocationSearchResultCell: UITableViewCell {
 
     // MARK: - Properties
 
+    var viewModel: LocationSearchResultCellViewModel? {
+        didSet { configure() }
+    }
+
     private let locationImageView: UIImageView = {
         let _imageView = UIImageView()
 
         _imageView.translatesAutoresizingMaskIntoConstraints = false
-        _imageView.image = UIImage(systemName: "clock")
+        _imageView.image = UIImage(systemName: "mappin.and.ellipse")
         _imageView.tintColor = .label
         _imageView.heightAnchor.constraint(equalToConstant: 16).isActive = true
         _imageView.widthAnchor.constraint(equalTo: _imageView.heightAnchor)
@@ -45,7 +49,6 @@ class LocationSearchResultCell: UITableViewCell {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Zazué Plaza"
         label.font = .preferredFont(forTextStyle: .headline)
 
         return label
@@ -55,7 +58,6 @@ class LocationSearchResultCell: UITableViewCell {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Cl. 116 #12-91, Santa Marta, Magdalena"
         label.textColor = .systemGray
         label.font = .preferredFont(forTextStyle: .subheadline)
 
@@ -143,6 +145,13 @@ extension LocationSearchResultCell {
                 constant: -8
             ),
         ])
+    }
+
+    private func configure() {
+        guard let viewModel else { return }
+
+        titleLabel.text = viewModel.title
+        addressLabel.text = viewModel.subtitle
     }
 
 }

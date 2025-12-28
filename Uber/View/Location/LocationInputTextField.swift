@@ -10,6 +10,7 @@ import UIKit
 protocol LocationInputTextFieldDelegate: AnyObject {
 
     func executeSearch(for query: String)
+    func inputTextFieldWantsToClearText()
 
 }
 
@@ -168,6 +169,8 @@ extension LocationInputTextField {
     @objc func clearInputButtomTapped(_ sender: UIButton) {
         inputTextField.text = ""
         clearInputButtom.isHidden = true
+
+        delegate?.inputTextFieldWantsToClearText()
     }
 
 }
