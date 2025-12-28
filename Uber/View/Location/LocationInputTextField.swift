@@ -48,7 +48,7 @@ class LocationInputTextField: UIView {
         textField.delegate = self
         textField.font = .preferredFont(forTextStyle: .footnote)
         textField.autocorrectionType = .no
-        textField.returnKeyType = .search
+        textField.returnKeyType = .done
         textField.setContentHuggingPriority(
             UILayoutPriority(249),
             for: .horizontal
@@ -164,6 +164,8 @@ extension LocationInputTextField {
         guard let text = sender.text else { return }
 
         clearInputButtom.isHidden = text.isEmpty
+
+        delegate?.executeSearch(for: text)
     }
 
     @objc func clearInputButtomTapped(_ sender: UIButton) {
@@ -194,9 +196,7 @@ extension LocationInputTextField: UITextFieldDelegate {
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let query = textField.text, !query.isEmpty else { return false }
-
-        delegate?.executeSearch(for: query)
+        textField.endEditing(true)
 
         return true
     }
