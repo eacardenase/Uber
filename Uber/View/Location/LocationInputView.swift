@@ -5,7 +5,6 @@
 //  Created by Edwin Cardenas on 12/13/25.
 //
 
-import MapKit
 import UIKit
 
 protocol LocationInputViewDelegate: LocationInputTextFieldDelegate {
@@ -116,16 +115,13 @@ extension LocationInputView {
     }
 
     private func setupPickLocation() {
-        guard let location = LocationManager.shared.location else { return }
-
-        let geocoder = CLGeocoder()
-
-        geocoder.reverseGeocodeLocation(location) { placemarks, error in
-            guard let placemark = placemarks?.first, error == nil else {
-                return
+        LocationManager.shared.requestLocationName { result in
+            switch result {
+            case .success(let locationName):
+                self.pickupInput.text = locationName
+            case .failure(let error):
+                print(error)
             }
-
-            self.pickupInput.text = placemark.name
         }
     }
 

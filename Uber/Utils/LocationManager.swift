@@ -6,7 +6,15 @@
 //
 
 import CoreLocation
+import MapKit
 import UIKit
+
+enum LocationError: Error {
+
+    case fetchFailed(String)
+    case reverseGeocodeFailed(String)
+
+}
 
 class LocationManager: NSObject {
 
@@ -45,6 +53,42 @@ extension LocationManager {
             manager.requestAlwaysAuthorization()
         default:
             break
+        }
+    }
+
+    func requestLocationName(
+        completion: @escaping (Result<String, LocationError>) -> Void
+    ) {
+        guard let location = LocationManager.shared.location else {
+            completion(.failure(.reverseGeocodeFailed("Location is nil.")))
+
+            return
+        }
+
+        let geocoder = CLGeocoder()
+
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let error {
+                completion(
+                    .failure(.reverseGeocodeFailed(error.localizedDescription))
+                )
+
+                return
+            }
+
+            guard let placemark = placemarks?.first,
+                let locationName = placemark.name
+            else {
+                completion(
+                    .failure(
+                        .reverseGeocodeFailed("Failed to get location name.")
+                    )
+                )
+
+                return
+            }
+
+            completion(.success(locationName))
         }
     }
 
