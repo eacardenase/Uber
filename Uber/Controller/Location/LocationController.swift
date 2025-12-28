@@ -346,3 +346,13 @@ extension LocationController: MKLocalSearchCompleterDelegate {
     }
 
 }
+
+// MARK: - UIScrollViewDelegate
+
+extension LocationController {
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        view.endEditing(true)
+    }
+
+}
