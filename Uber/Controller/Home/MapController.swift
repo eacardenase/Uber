@@ -56,6 +56,8 @@ class MapController: UIViewController {
         LocationManager.shared.enableLocationServices()
 
         fetchDrivers()
+
+        locationController.delegate = self
     }
 
 }
@@ -203,6 +205,20 @@ extension MapController: MKMapViewDelegate {
         view.image = UIImage(systemName: "car.fill")
 
         return view
+    }
+
+}
+
+// MARK: - LocationControllerDelegate
+
+extension MapController: LocationControllerDelegate {
+
+    func dismiss(_ controller: LocationController) {
+        print(#function)
+
+        controller.willMove(toParent: nil)
+        controller.removeFromParent()
+        controller.view.removeFromSuperview()
     }
 
 }

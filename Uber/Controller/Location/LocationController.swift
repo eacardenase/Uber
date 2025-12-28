@@ -8,9 +8,17 @@
 import MapKit
 import UIKit
 
+protocol LocationControllerDelegate: AnyObject {
+
+    func dismiss(_ controller: LocationController)
+
+}
+
 class LocationController: UIViewController {
 
     // MARK: - Properties
+
+    weak var delegate: LocationControllerDelegate?
 
     var region: MKCoordinateRegion?
 
@@ -221,7 +229,7 @@ extension LocationController {
 extension LocationController {
 
     @objc func backButtonTapped(_ sender: UIButton) {
-        print(#function)
+        delegate?.dismiss(self)
     }
 
 }
