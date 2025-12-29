@@ -9,7 +9,9 @@ import MapKit
 
 struct LocationSearchResultCellViewModel {
 
-    let completion: MKLocalSearchCompletion
+    // MARK: - Properties
+
+    private let completion: MKLocalSearchCompletion
 
     var title: String {
         completion.title
@@ -19,4 +21,9 @@ struct LocationSearchResultCellViewModel {
         completion.subtitle
     }
 
+    // MARK: - Initializers
+
+    init(completion: MKLocalSearchCompletion) {
+        self.completion = completion
+    }
 }

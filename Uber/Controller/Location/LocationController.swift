@@ -22,19 +22,11 @@ class LocationController: UIViewController {
 
     var region: MKCoordinateRegion?
 
-    var queryText = ""
-
-    var searchResults = [LocationSearchResultCellViewModel]() {
+    private var queryText = ""
+    private let searchCompleter = MKLocalSearchCompleter()
+    private var searchResults = [LocationSearchResultCellViewModel]() {
         didSet { tableView.reloadData() }
     }
-
-    private lazy var searchCompleter: MKLocalSearchCompleter = {
-        let completer = MKLocalSearchCompleter()
-
-        completer.delegate = self
-
-        return completer
-    }()
 
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
@@ -116,6 +108,7 @@ class LocationController: UIViewController {
         super.viewDidLoad()
 
         locationInputView.delegate = self
+        searchCompleter.delegate = self
 
         setupViews()
     }
