@@ -11,7 +11,7 @@ struct LocationSearchResultCellViewModel {
 
     // MARK: - Properties
 
-    private let completion: MKLocalSearchCompletion
+    let completion: MKLocalSearchCompletion
 
     var title: String {
         completion.title

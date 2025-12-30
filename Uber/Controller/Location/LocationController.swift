@@ -11,6 +11,10 @@ import UIKit
 protocol LocationControllerDelegate: AnyObject {
 
     func dismiss(_ controller: LocationController)
+    func controllerWantsToPresentAnnotation(
+        _ controller: LocationController,
+        for searchCompletion: MKLocalSearchCompletion
+    )
 
 }
 
@@ -309,6 +313,24 @@ extension LocationController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension LocationController: UITableViewDelegate {
+
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        guard let section = LocationSections(rawValue: indexPath.section) else {
+            fatalError("Could not create LocationSections from raw value.")
+        }
+
+        if case .searchResults = section {
+            let viewModel = searchResults[indexPath.row]
+
+            delegate?.controllerWantsToPresentAnnotation(
+                self,
+                for: viewModel.completion
+            )
+        }
+    }
 
 }
 

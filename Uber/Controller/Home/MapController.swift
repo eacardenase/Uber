@@ -214,11 +214,42 @@ extension MapController: MKMapViewDelegate {
 extension MapController: LocationControllerDelegate {
 
     func dismiss(_ controller: LocationController) {
-        print(#function)
-
         controller.willMove(toParent: nil)
         controller.removeFromParent()
         controller.view.removeFromSuperview()
+    }
+
+    func controllerWantsToPresentAnnotation(
+        _ controller: LocationController,
+        for searchCompletion: MKLocalSearchCompletion
+    ) {
+        dismiss(controller)
+
+        let request = MKLocalSearch.Request(completion: searchCompletion)
+        let search = MKLocalSearch(request: request)
+
+        search.start { response, error in
+            if let error {
+                print(error.localizedDescription)
+
+                return
+            }
+
+            guard let searchResult = response?.mapItems.first else {
+                print(
+                    "DEBUG: Failed to get search result from \(searchCompletion.title)"
+                )
+
+                return
+            }
+
+            let annotation = MKPointAnnotation(
+                coordinate: searchResult.placemark.coordinate
+            )
+
+            self.mapView.addAnnotation(annotation)
+            self.mapView.selectAnnotation(annotation, animated: true)
+        }
     }
 
 }
