@@ -20,6 +20,7 @@ class MapController: UIViewController {
     private lazy var mapView: MKMapView = {
         let _mapView = MKMapView()
 
+        _mapView.translatesAutoresizingMaskIntoConstraints = false
         _mapView.showsUserLocation = true
         _mapView.userTrackingMode = .follow
         _mapView.delegate = self
@@ -28,13 +29,28 @@ class MapController: UIViewController {
         return _mapView
     }()
 
+    private lazy var backButton: UIButton = {
+        let button = UIButton(type: .system)
+
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "arrow.left"), for: .normal)
+        button.tintColor = .label
+        button.addTarget(
+            self,
+            action: #selector(backButtonTapped),
+            for: .touchUpInside
+        )
+
+        return button
+    }()
+
     // MARK: - View Lifecycle
 
     override func loadView() {
         view = UIView()
 
-        mapView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mapView)
+        view.addSubview(backButton)
 
         // mapView
         NSLayoutConstraint.activate([
@@ -42,6 +58,19 @@ class MapController: UIViewController {
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
+        // backButton
+        NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            backButton.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                constant: 32
+            ),
+            backButton.heightAnchor.constraint(equalToConstant: 24),
+            backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
         ])
 
     }
@@ -250,6 +279,16 @@ extension MapController: LocationControllerDelegate {
             self.mapView.addAnnotation(annotation)
             self.mapView.selectAnnotation(annotation, animated: true)
         }
+    }
+
+}
+
+// MARK: - Actions
+
+extension MapController {
+
+    @objc func backButtonTapped(_ sender: UIButton) {
+        print(#function)
     }
 
 }

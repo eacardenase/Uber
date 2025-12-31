@@ -162,7 +162,7 @@ extension LocationController {
             ),
             backButton.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: 32
+                constant: 24
             ),
             backButton.heightAnchor.constraint(equalToConstant: 24),
             backButton.widthAnchor.constraint(equalTo: backButton.heightAnchor),
