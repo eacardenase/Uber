@@ -13,7 +13,6 @@ class MapController: UIViewController {
     // MARK: - Properties
 
     private var user: User?
-    private var currentAnnotations = [DriverAnnotation]()
 
     private let locationController = LocationController()
 
@@ -236,6 +235,10 @@ extension MapController: MKMapViewDelegate {
         return view
     }
 
+    func mapView(_ mapView: MKMapView, didSelect annotation: any MKAnnotation) {
+        print(annotation.coordinate)
+    }
+
 }
 
 // MARK: - LocationControllerDelegate
@@ -264,7 +267,7 @@ extension MapController: LocationControllerDelegate {
                 return
             }
 
-            guard let searchResult = response?.mapItems.first else {
+            guard let response else {
                 print(
                     "DEBUG: Failed to get search result from \(searchCompletion.title)"
                 )
@@ -272,12 +275,17 @@ extension MapController: LocationControllerDelegate {
                 return
             }
 
-            let annotation = MKPointAnnotation(
-                coordinate: searchResult.placemark.coordinate
-            )
+            let results = response.mapItems.compactMap {
+                MKPointAnnotation(
+                    coordinate: $0.placemark.coordinate
+                )
+            }
 
-            self.mapView.addAnnotation(annotation)
-            self.mapView.selectAnnotation(annotation, animated: true)
+            self.mapView.addAnnotations(results)
+
+            if let firstAnnotation = results.first {
+                self.mapView.selectAnnotation(firstAnnotation, animated: true)
+            }
         }
     }
 
@@ -288,7 +296,10 @@ extension MapController: LocationControllerDelegate {
 extension MapController {
 
     @objc func backButtonTapped(_ sender: UIButton) {
-        print(#function)
+        for annotation in mapView.annotations
+        where annotation is MKPointAnnotation {
+            mapView.removeAnnotation(annotation)
+        }
     }
 
 }
