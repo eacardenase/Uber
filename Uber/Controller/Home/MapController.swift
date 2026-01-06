@@ -15,6 +15,7 @@ class MapController: UIViewController {
     private var user: User?
 
     private let locationController = LocationController()
+    private var route: MKRoute?
 
     private lazy var mapView: MKMapView = {
         let _mapView = MKMapView()
@@ -154,6 +155,59 @@ extension MapController {
         }
     }
 
+    private func removeAnnotations() {
+        for annotation in mapView.annotations
+        where annotation is MKPointAnnotation {
+            mapView.removeAnnotation(annotation)
+        }
+    }
+
+    private func generatePolyline(to destination: MKMapItem) {
+        let request = MKDirections.Request()
+        request.source = MKMapItem.forCurrentLocation()
+        request.destination = destination
+        request.transportType = .automobile
+
+        let directionRequest = MKDirections(request: request)
+
+        directionRequest.calculate { response, error in
+            if let error {
+                print(
+                    "DEBUG: Failed to calculate directions with error: \(error.localizedDescription)"
+                )
+
+                return
+            }
+
+            guard let response else {
+                print("DEBUG: Failed to get directions response.")
+
+                return
+            }
+
+            self.route = response.routes.first
+
+            guard let polyline = self.route?.polyline else {
+                print("DEBUG: Failed to get polyline from route.")
+
+                return
+            }
+
+            self.mapView.addOverlay(polyline)
+        }
+    }
+
+    private func removePolyline(for route: MKRoute?) {
+        if let route {
+            mapView.removeOverlay(route.polyline)
+        }
+    }
+
+    private func removeAnnotationsAndPolyline() {
+        removePolyline(for: route)
+        removeAnnotations()
+    }
+
 }
 
 // MARK: - AuthenticationDelegate
@@ -236,7 +290,26 @@ extension MapController: MKMapViewDelegate {
     }
 
     func mapView(_ mapView: MKMapView, didSelect annotation: any MKAnnotation) {
-        print(annotation.coordinate)
+        let placemark = MKPlacemark(coordinate: annotation.coordinate)
+        let destination = MKMapItem(placemark: placemark)
+
+        removePolyline(for: route)
+
+        generatePolyline(to: destination)
+    }
+
+    func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay)
+        -> MKOverlayRenderer
+    {
+        guard let route else { fatalError("Failed to render route.") }
+
+        let polyline = route.polyline
+        let lineRenderer = MKPolylineRenderer(polyline: polyline)
+        lineRenderer.strokeColor = .label
+        lineRenderer.lineWidth = 4
+
+        return lineRenderer
+
     }
 
 }
@@ -296,10 +369,7 @@ extension MapController: LocationControllerDelegate {
 extension MapController {
 
     @objc func backButtonTapped(_ sender: UIButton) {
-        for annotation in mapView.annotations
-        where annotation is MKPointAnnotation {
-            mapView.removeAnnotation(annotation)
-        }
+        removeAnnotationsAndPolyline()
     }
 
 }
