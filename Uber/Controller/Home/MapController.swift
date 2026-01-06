@@ -296,6 +296,12 @@ extension MapController: MKMapViewDelegate {
         removePolyline(for: route)
 
         generatePolyline(to: destination)
+
+        let annotations = mapView.annotations.filter {
+            !$0.isKind(of: DriverAnnotation.self)
+        }
+
+        mapView.showAnnotations(annotations, animated: true)
     }
 
     func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay)
@@ -370,6 +376,8 @@ extension MapController {
 
     @objc func backButtonTapped(_ sender: UIButton) {
         removeAnnotationsAndPolyline()
+
+        mapView.showAnnotations(mapView.annotations, animated: true)
     }
 
 }
