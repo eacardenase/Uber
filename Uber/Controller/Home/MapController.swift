@@ -16,6 +16,7 @@ class MapController: UIViewController {
 
     private let locationController = LocationController()
     private var route: MKRoute?
+    private var ridesNavigationController: UINavigationController?
 
     private lazy var mapView: MKMapView = {
         let _mapView = MKMapView()
@@ -208,6 +209,24 @@ extension MapController {
         removeAnnotations()
     }
 
+    private func presentRidesController() {
+        let controller = RideController()
+
+        ridesNavigationController = UINavigationController(
+            rootViewController: controller
+        )
+
+        guard let navController = ridesNavigationController,
+            let sheet = navController.sheetPresentationController
+        else { return }
+
+        sheet.detents = [.medium(), .large()]
+        sheet.largestUndimmedDetentIdentifier = .medium
+        sheet.prefersGrabberVisible = true
+
+        present(navController, animated: true)
+    }
+
 }
 
 // MARK: - AuthenticationDelegate
@@ -366,6 +385,8 @@ extension MapController: LocationControllerDelegate {
                 self.mapView.selectAnnotation(firstAnnotation, animated: true)
             }
         }
+
+        presentRidesController()
     }
 
 }
@@ -375,9 +396,16 @@ extension MapController: LocationControllerDelegate {
 extension MapController {
 
     @objc func backButtonTapped(_ sender: UIButton) {
-        removeAnnotationsAndPolyline()
+        guard let ridesNavigationController else { return }
 
-        mapView.showAnnotations(mapView.annotations, animated: true)
+        ridesNavigationController.dismiss(animated: true) {
+            self.removeAnnotationsAndPolyline()
+
+            self.mapView.showAnnotations(
+                self.mapView.annotations,
+                animated: true
+            )
+        }
     }
 
 }
