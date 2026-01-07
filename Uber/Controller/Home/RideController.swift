@@ -35,7 +35,11 @@ class RideController: UIViewController {
         return _tableView
     }()
 
-    let ridePaymentView = RidePaymentSelectionView()
+    private let ridePaymentView = RidePaymentSelectionView()
+
+    var minHeight: CGFloat {
+        return ridePaymentView.frame.height + 80
+    }
 
     // MARK: - View Lifecycle
 

@@ -54,6 +54,13 @@ class PaymentMethodView: UIView {
         super.init(frame: frame)
 
         setupViews()
+
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(changePaymentMethod)
+        )
+
+        addGestureRecognizer(tapGesture)
     }
 
     required init?(coder: NSCoder) {
@@ -110,6 +117,16 @@ extension PaymentMethodView {
                 constant: -8
             ),
         ])
+    }
+
+}
+
+// MARK: - Actions
+
+extension PaymentMethodView {
+
+    @objc func changePaymentMethod(_ sender: UITapGestureRecognizer) {
+        print(#function)
     }
 
 }

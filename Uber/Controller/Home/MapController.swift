@@ -211,7 +211,7 @@ extension MapController {
 
     private func presentRidesController() {
         let controller = RideController()
-        
+
         controller.view.layoutSubviews()
 
         ridesNavigationController = UINavigationController(
@@ -228,7 +228,7 @@ extension MapController {
                     .navigationBar
             else { return 0 }
 
-            return controller.ridePaymentView.frame.height
+            return controller.minHeight
                 + navigationBar.frame.height
         }
 
