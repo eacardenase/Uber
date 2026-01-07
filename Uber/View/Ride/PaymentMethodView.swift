@@ -29,9 +29,24 @@ class PaymentMethodView: UIView {
         return imageView
     }()
 
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: 50)
-    }
+    private let paymentMethodNameLabel: UILabel = {
+        let label = UILabel()
+
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Edwin Cardenas ••••1234"
+        label.font = .preferredFont(forTextStyle: .body)
+
+        return label
+    }()
+
+    private let actionImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "chevron.right"))
+
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.tintColor = .label
+
+        return imageView
+    }()
 
     // MARK: - Initializers
 
@@ -56,6 +71,8 @@ extension PaymentMethodView {
         backgroundColor = .systemBackground
 
         addSubview(paymentMethodImageView)
+        addSubview(paymentMethodNameLabel)
+        addSubview(actionImageView)
 
         // paymentMethodImageView
         NSLayoutConstraint.activate([
@@ -68,6 +85,28 @@ extension PaymentMethodView {
             ),
             paymentMethodImageView.bottomAnchor.constraint(
                 equalTo: bottomAnchor,
+                constant: -8
+            ),
+        ])
+
+        // paymentMethodNameLabel
+        NSLayoutConstraint.activate([
+            paymentMethodNameLabel.centerYAnchor.constraint(
+                equalTo: paymentMethodImageView.centerYAnchor
+            ),
+            paymentMethodNameLabel.leadingAnchor.constraint(
+                equalTo: paymentMethodImageView.trailingAnchor,
+                constant: 16
+            ),
+        ])
+
+        // actionImageView
+        NSLayoutConstraint.activate([
+            actionImageView.centerYAnchor.constraint(
+                equalTo: paymentMethodImageView.centerYAnchor
+            ),
+            actionImageView.trailingAnchor.constraint(
+                equalTo: trailingAnchor,
                 constant: -8
             ),
         ])
