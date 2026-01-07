@@ -98,10 +98,10 @@ extension RideController {
         // ridePaymentView
         NSLayoutConstraint.activate([
             ridePaymentView.leadingAnchor.constraint(
-                equalTo: tableView.leadingAnchor
+                equalTo: view.leadingAnchor
             ),
             ridePaymentView.trailingAnchor.constraint(
-                equalTo: tableView.trailingAnchor
+                equalTo: view.trailingAnchor
             ),
             ridePaymentView.bottomAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.bottomAnchor,

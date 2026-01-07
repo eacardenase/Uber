@@ -74,9 +74,11 @@ extension RidePaymentSelectionView {
                 equalTo: dividerView.bottomAnchor,
                 constant: 16
             ),
-            paymentMethodView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            paymentMethodView.leadingAnchor.constraint(
+                equalTo: rideSelectionButton.leadingAnchor
+            ),
             paymentMethodView.trailingAnchor.constraint(
-                equalTo: trailingAnchor
+                equalTo: rideSelectionButton.trailingAnchor
             ),
         ])
 
@@ -87,10 +89,12 @@ extension RidePaymentSelectionView {
                 constant: 16
             ),
             rideSelectionButton.leadingAnchor.constraint(
-                equalTo: leadingAnchor
+                equalTo: leadingAnchor,
+                constant: 16
             ),
             rideSelectionButton.trailingAnchor.constraint(
-                equalTo: trailingAnchor
+                equalTo: trailingAnchor,
+                constant: -16
             ),
             rideSelectionButton.bottomAnchor.constraint(equalTo: bottomAnchor),
             rideSelectionButton.heightAnchor.constraint(equalToConstant: 50),

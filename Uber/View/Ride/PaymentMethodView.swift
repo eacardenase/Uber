@@ -18,6 +18,13 @@ class PaymentMethodView: UIView {
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "creditcard")
+        imageView.tintColor = .label
+        imageView.setContentHuggingPriority(.required, for: .vertical)
+        imageView.setContentHuggingPriority(.required, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(
+            .required,
+            for: .vertical
+        )
 
         return imageView
     }()
@@ -46,7 +53,24 @@ extension PaymentMethodView {
 
     private func setupViews() {
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .systemPink
+        backgroundColor = .systemBackground
+
+        addSubview(paymentMethodImageView)
+
+        // paymentMethodImageView
+        NSLayoutConstraint.activate([
+            paymentMethodImageView.topAnchor.constraint(
+                equalTo: topAnchor,
+                constant: 8
+            ),
+            paymentMethodImageView.leadingAnchor.constraint(
+                equalTo: leadingAnchor
+            ),
+            paymentMethodImageView.bottomAnchor.constraint(
+                equalTo: bottomAnchor,
+                constant: -8
+            ),
+        ])
     }
 
 }
