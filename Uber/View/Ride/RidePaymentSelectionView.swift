@@ -20,6 +20,19 @@ class RidePaymentSelectionView: UIView {
         return view
     }()
 
+    private let rideSelectionButton: UIButton = {
+        let button = UIButton(type: .system)
+
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Choose Taxi", for: .normal)
+        button.tintColor = .systemBackground
+        button.backgroundColor = .label
+        button.layer.cornerRadius = 8
+        button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+
+        return button
+    }()
+
     override var intrinsicContentSize: CGSize {
         return CGSize(width: UIView.noIntrinsicMetric, height: 150)
     }
@@ -47,6 +60,7 @@ extension RidePaymentSelectionView {
         backgroundColor = .systemBackground
 
         addSubview(dividerView)
+        addSubview(rideSelectionButton)
 
         // dividerView
         NSLayoutConstraint.activate([
@@ -54,6 +68,18 @@ extension RidePaymentSelectionView {
             dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             dividerView.heightAnchor.constraint(equalToConstant: 1),
+        ])
+
+        // rideSelectionButton
+        NSLayoutConstraint.activate([
+            rideSelectionButton.leadingAnchor.constraint(
+                equalTo: leadingAnchor
+            ),
+            rideSelectionButton.trailingAnchor.constraint(
+                equalTo: trailingAnchor
+            ),
+            rideSelectionButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+            rideSelectionButton.heightAnchor.constraint(equalToConstant: 50),
         ])
     }
 
