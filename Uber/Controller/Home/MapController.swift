@@ -211,6 +211,8 @@ extension MapController {
 
     private func presentRidesController() {
         let controller = RideController()
+        
+        controller.view.layoutSubviews()
 
         ridesNavigationController = UINavigationController(
             rootViewController: controller

@@ -20,6 +20,8 @@ class RidePaymentSelectionView: UIView {
         return view
     }()
 
+    private let paymentMethodView = PaymentMethodView()
+
     private let rideSelectionButton: UIButton = {
         let button = UIButton(type: .system)
 
@@ -32,10 +34,6 @@ class RidePaymentSelectionView: UIView {
 
         return button
     }()
-
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: 150)
-    }
 
     // MARK: - Initializers
 
@@ -60,6 +58,7 @@ extension RidePaymentSelectionView {
         backgroundColor = .systemBackground
 
         addSubview(dividerView)
+        addSubview(paymentMethodView)
         addSubview(rideSelectionButton)
 
         // dividerView
@@ -70,8 +69,23 @@ extension RidePaymentSelectionView {
             dividerView.heightAnchor.constraint(equalToConstant: 1),
         ])
 
+        NSLayoutConstraint.activate([
+            paymentMethodView.topAnchor.constraint(
+                equalTo: dividerView.bottomAnchor,
+                constant: 16
+            ),
+            paymentMethodView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            paymentMethodView.trailingAnchor.constraint(
+                equalTo: trailingAnchor
+            ),
+        ])
+
         // rideSelectionButton
         NSLayoutConstraint.activate([
+            rideSelectionButton.topAnchor.constraint(
+                equalTo: paymentMethodView.bottomAnchor,
+                constant: 16
+            ),
             rideSelectionButton.leadingAnchor.constraint(
                 equalTo: leadingAnchor
             ),
