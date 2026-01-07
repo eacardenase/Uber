@@ -220,9 +220,22 @@ extension MapController {
             let sheet = navController.sheetPresentationController
         else { return }
 
-        sheet.detents = [.medium(), .large()]
-        sheet.largestUndimmedDetentIdentifier = .medium
+        let smallDetent = UISheetPresentationController.Detent.custom { _ in
+            guard
+                let navigationBar = controller.navigationController?
+                    .navigationBar
+            else { return 0 }
+
+            return controller.ridePaymentView.frame.height
+                + navigationBar.frame.height
+        }
+
+        sheet.detents = [smallDetent, .medium(), .large()]
+        sheet.largestUndimmedDetentIdentifier = .large
+        sheet.selectedDetentIdentifier = .medium
         sheet.prefersGrabberVisible = true
+
+        navController.isModalInPresentation = true
 
         present(navController, animated: true)
     }

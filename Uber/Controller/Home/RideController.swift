@@ -11,7 +11,7 @@ class RideController: UIViewController {
 
     // MARK: - Properties
 
-    let dividerView: UIView = {
+    private let dividerView: UIView = {
         let view = UIView()
 
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -19,6 +19,8 @@ class RideController: UIViewController {
 
         return view
     }()
+
+    let ridePaymentView = RidePaymentSelectionView()
 
     // MARK: - View Lifecycle
 
@@ -40,6 +42,7 @@ extension RideController {
         view.backgroundColor = .systemBackground
 
         view.addSubview(dividerView)
+        view.addSubview(ridePaymentView)
 
         // dividerView
         NSLayoutConstraint.activate([
@@ -49,6 +52,19 @@ extension RideController {
             dividerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             dividerView.heightAnchor.constraint(equalToConstant: 2),
+        ])
+
+        // ridePaymentView
+        NSLayoutConstraint.activate([
+            ridePaymentView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor
+            ),
+            ridePaymentView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor
+            ),
+            ridePaymentView.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor
+            ),
         ])
     }
 
