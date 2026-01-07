@@ -20,6 +20,21 @@ class RideController: UIViewController {
         return view
     }()
 
+    private lazy var tableView: UITableView = {
+        let _tableView = UITableView()
+
+        _tableView.translatesAutoresizingMaskIntoConstraints = false
+        _tableView.dataSource = self
+        _tableView.delegate = self
+        _tableView.rowHeight = 80
+        _tableView.register(
+            UITableViewCell.self,
+            forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self)
+        )
+
+        return _tableView
+    }()
+
     let ridePaymentView = RidePaymentSelectionView()
 
     // MARK: - View Lifecycle
@@ -42,6 +57,7 @@ extension RideController {
         view.backgroundColor = .systemBackground
 
         view.addSubview(dividerView)
+        view.addSubview(tableView)
         view.addSubview(ridePaymentView)
 
         // dividerView
@@ -54,15 +70,38 @@ extension RideController {
             dividerView.heightAnchor.constraint(equalToConstant: 2),
         ])
 
-        // ridePaymentView
+        // tableView
+
+        let tableViewBottomAnchor = tableView.bottomAnchor.constraint(
+            equalTo: ridePaymentView.topAnchor,
+            constant: -16
+        )
+
+        tableViewBottomAnchor.priority = UILayoutPriority(900)
+
         NSLayoutConstraint.activate([
-            ridePaymentView.leadingAnchor.constraint(
+            tableView.topAnchor.constraint(
+                equalTo: dividerView.bottomAnchor,
+                constant: 16
+            ),
+            tableView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
                 constant: 16
             ),
-            ridePaymentView.trailingAnchor.constraint(
+            tableView.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor,
                 constant: -16
+            ),
+            tableViewBottomAnchor,
+        ])
+
+        // ridePaymentView
+        NSLayoutConstraint.activate([
+            ridePaymentView.leadingAnchor.constraint(
+                equalTo: tableView.leadingAnchor
+            ),
+            ridePaymentView.trailingAnchor.constraint(
+                equalTo: tableView.trailingAnchor
             ),
             ridePaymentView.bottomAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.bottomAnchor,
@@ -70,5 +109,34 @@ extension RideController {
             ),
         ])
     }
+
+}
+
+// MARK: - UITableViewDataSource
+
+extension RideController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)
+        -> Int
+    {
+        return 5
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
+        -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: NSStringFromClass(UITableViewCell.self),
+            for: indexPath
+        )
+
+        return cell
+    }
+
+}
+
+// MARK: - UITableViewDelegate
+
+extension RideController: UITableViewDelegate {
 
 }
