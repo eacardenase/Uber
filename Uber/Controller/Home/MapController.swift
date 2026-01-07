@@ -212,34 +212,20 @@ extension MapController {
     private func presentRidesController() {
         let controller = RideController()
 
-        controller.view.layoutSubviews()
+        if let sheet = controller.sheetPresentationController {
+            let smallDetent = UISheetPresentationController.Detent.custom { _ in
+                return controller.minHeight
+            }
 
-        ridesNavigationController = UINavigationController(
-            rootViewController: controller
-        )
-
-        guard let navController = ridesNavigationController,
-            let sheet = navController.sheetPresentationController
-        else { return }
-
-        let smallDetent = UISheetPresentationController.Detent.custom { _ in
-            guard
-                let navigationBar = controller.navigationController?
-                    .navigationBar
-            else { return 0 }
-
-            return controller.minHeight
-                + navigationBar.frame.height
+            sheet.detents = [smallDetent, .medium(), .large()]
+            sheet.largestUndimmedDetentIdentifier = .large
+            sheet.selectedDetentIdentifier = .medium
+            sheet.prefersGrabberVisible = true
         }
 
-        sheet.detents = [smallDetent, .medium(), .large()]
-        sheet.largestUndimmedDetentIdentifier = .large
-        sheet.selectedDetentIdentifier = .medium
-        sheet.prefersGrabberVisible = true
+        controller.isModalInPresentation = true
 
-        navController.isModalInPresentation = true
-
-        present(navController, animated: true)
+        present(controller, animated: true)
     }
 
 }

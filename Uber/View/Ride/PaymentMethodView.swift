@@ -14,8 +14,6 @@ class PaymentMethodView: UIView {
     private let paymentMethodImageView: UIImageView = {
         let imageView = UIImageView()
 
-        // Option + 8: ••••
-
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "creditcard")
         imageView.tintColor = .label

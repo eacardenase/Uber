@@ -11,6 +11,17 @@ class RideController: UIViewController {
 
     // MARK: - Properties
 
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Choose a ride"
+        label.font = .preferredFont(forTextStyle: .headline)
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+
+        return label
+    }()
+
     private let dividerView: UIView = {
         let view = UIView()
 
@@ -26,10 +37,12 @@ class RideController: UIViewController {
         _tableView.translatesAutoresizingMaskIntoConstraints = false
         _tableView.dataSource = self
         _tableView.delegate = self
-        _tableView.rowHeight = 80
+        _tableView.separatorStyle = .none
         _tableView.register(
-            UITableViewCell.self,
-            forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self)
+            RideSelectionOptionCell.self,
+            forCellReuseIdentifier: NSStringFromClass(
+                RideSelectionOptionCell.self
+            )
         )
 
         return _tableView
@@ -38,15 +51,14 @@ class RideController: UIViewController {
     private let ridePaymentView = RidePaymentSelectionView()
 
     var minHeight: CGFloat {
-        return ridePaymentView.frame.height + 80
+        return titleLabel.frame.height
+            + ridePaymentView.frame.height
     }
 
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = "Choose a ride"
 
         setupViews()
     }
@@ -60,14 +72,25 @@ extension RideController {
     private func setupViews() {
         view.backgroundColor = .systemBackground
 
+        view.addSubview(titleLabel)
         view.addSubview(dividerView)
         view.addSubview(tableView)
         view.addSubview(ridePaymentView)
 
+        // titleLabel
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: 24
+            ),
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        ])
+
         // dividerView
         NSLayoutConstraint.activate([
             dividerView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
+                equalTo: titleLabel.bottomAnchor,
+                constant: 16
             ),
             dividerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -130,7 +153,7 @@ extension RideController: UITableViewDataSource {
         -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: NSStringFromClass(UITableViewCell.self),
+            withIdentifier: NSStringFromClass(RideSelectionOptionCell.self),
             for: indexPath
         )
 
