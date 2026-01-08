@@ -110,10 +110,7 @@ extension PaymentMethodView {
             actionImageView.centerYAnchor.constraint(
                 equalTo: paymentMethodImageView.centerYAnchor
             ),
-            actionImageView.trailingAnchor.constraint(
-                equalTo: trailingAnchor,
-                constant: -8
-            ),
+            actionImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
 

@@ -51,14 +51,18 @@ class RideController: UIViewController {
     private let ridePaymentView = RidePaymentSelectionView()
 
     var minHeight: CGFloat {
-        return titleLabel.frame.height
+        let indexPath = IndexPath(row: 0, section: 0)
+        let rect = tableView.rectForRow(at: indexPath)
+
+        return tableView.frame.origin.y
+            + rect.height + 32
             + ridePaymentView.frame.height
     }
 
     // MARK: - View Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        view = UIView()
 
         setupViews()
     }
@@ -99,11 +103,21 @@ extension RideController {
 
         // tableView
 
+        let tableViewLeadingAnchor = tableView.leadingAnchor.constraint(
+            equalTo: view.leadingAnchor,
+            constant: 8
+        )
+        let tableViewTrailingAnchor = tableView.trailingAnchor.constraint(
+            equalTo: view.trailingAnchor,
+            constant: -8
+        )
         let tableViewBottomAnchor = tableView.bottomAnchor.constraint(
             equalTo: ridePaymentView.topAnchor,
             constant: -16
         )
 
+        tableViewLeadingAnchor.priority = UILayoutPriority(900)
+        tableViewTrailingAnchor.priority = UILayoutPriority(900)
         tableViewBottomAnchor.priority = UILayoutPriority(900)
 
         NSLayoutConstraint.activate([
@@ -111,14 +125,8 @@ extension RideController {
                 equalTo: dividerView.bottomAnchor,
                 constant: 16
             ),
-            tableView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 16
-            ),
-            tableView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -16
-            ),
+            tableViewLeadingAnchor,
+            tableViewTrailingAnchor,
             tableViewBottomAnchor,
         ])
 

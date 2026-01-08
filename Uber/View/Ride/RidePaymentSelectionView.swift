@@ -83,19 +83,22 @@ extension RidePaymentSelectionView {
         ])
 
         // rideSelectionButton
+
+        let selectionButtonLeadingAnchor = rideSelectionButton.leadingAnchor
+            .constraint(equalTo: leadingAnchor, constant: 16)
+        let selectionButtonTrailingAnchor = rideSelectionButton.trailingAnchor
+            .constraint(equalTo: trailingAnchor, constant: -16)
+
+        selectionButtonLeadingAnchor.priority = UILayoutPriority(900)
+        selectionButtonTrailingAnchor.priority = UILayoutPriority(900)
+
         NSLayoutConstraint.activate([
             rideSelectionButton.topAnchor.constraint(
                 equalTo: paymentMethodView.bottomAnchor,
                 constant: 16
             ),
-            rideSelectionButton.leadingAnchor.constraint(
-                equalTo: leadingAnchor,
-                constant: 16
-            ),
-            rideSelectionButton.trailingAnchor.constraint(
-                equalTo: trailingAnchor,
-                constant: -16
-            ),
+            selectionButtonLeadingAnchor,
+            selectionButtonTrailingAnchor,
             rideSelectionButton.bottomAnchor.constraint(equalTo: bottomAnchor),
             rideSelectionButton.heightAnchor.constraint(equalToConstant: 50),
         ])

@@ -88,7 +88,7 @@ extension RideSelectionOptionCell {
             ),
             rideTypeLabel.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor,
-                constant: 8
+                constant: 16
             ),
         ])
 
@@ -125,9 +125,13 @@ extension RideSelectionOptionCell {
             ),
             rideAmountLabel.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor,
-                constant: -8
+                constant: -16
             ),
         ])
+
+        layer.cornerRadius = 8
+        layer.borderWidth = 2
+        layer.borderColor = UIColor.label.cgColor
     }
 
 }

@@ -212,6 +212,8 @@ extension MapController {
     private func presentRidesController() {
         let controller = RideController()
 
+        controller.view.layoutIfNeeded()
+
         if let sheet = controller.sheetPresentationController {
             let smallDetent = UISheetPresentationController.Detent.custom { _ in
                 return controller.minHeight
