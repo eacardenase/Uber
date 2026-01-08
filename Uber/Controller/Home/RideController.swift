@@ -67,6 +67,29 @@ class RideController: UIViewController {
         setupViews()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        let indexPath = IndexPath(row: 0, section: 0)
+
+        if let cell = tableView.cellForRow(at: indexPath)
+            as? RideSelectionOptionCell
+        {
+            cell.addSelectedBorder()
+        }
+
+        tableView.selectRow(
+            at: indexPath,
+            animated: true,
+            scrollPosition: .top
+        )
+    }
+
 }
 
 // MARK: - Helpers
@@ -173,5 +196,23 @@ extension RideController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension RideController: UITableViewDelegate {
+
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        for (index, cell) in tableView.visibleCells.enumerated() {
+            guard
+                let cell = cell
+                    as? RideSelectionOptionCell
+            else { return }
+
+            if index == indexPath.row {
+                cell.addSelectedBorder()
+            } else {
+                cell.removeSelectedBorder()
+            }
+        }
+    }
 
 }

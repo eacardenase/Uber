@@ -60,6 +60,8 @@ class RideSelectionOptionCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         setupViews()
+
+        selectionStyle = .none
     }
 
     required init?(coder: NSCoder) {
@@ -129,6 +131,15 @@ extension RideSelectionOptionCell {
             ),
         ])
 
+    }
+
+    func removeSelectedBorder() {
+        layer.cornerRadius = 0
+        layer.borderWidth = 0
+        layer.borderColor = UIColor.systemBackground.cgColor
+    }
+
+    func addSelectedBorder() {
         layer.cornerRadius = 8
         layer.borderWidth = 2
         layer.borderColor = UIColor.label.cgColor
