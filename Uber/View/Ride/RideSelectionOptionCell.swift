@@ -17,6 +17,17 @@ class RideSelectionOptionCell: UITableViewCell {
 
     static let rowHeight: CGFloat = 80
 
+    private let rideTypeImageView: UIImageView = {
+        let imageView = UIImageView()
+        let image = UIImage(resource: .uberXIcon)
+
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = image
+        imageView.contentMode = .scaleAspectFit
+
+        return imageView
+    }()
+
     private let rideTypeLabel: UILabel = {
         let label = UILabel()
 
@@ -77,10 +88,22 @@ extension RideSelectionOptionCell {
     private func setupViews() {
         backgroundColor = .systemBackground
 
+        contentView.addSubview(rideTypeImageView)
         contentView.addSubview(rideTypeLabel)
         contentView.addSubview(rideDistanceLabel)
         contentView.addSubview(auxiliaryLabel)
         contentView.addSubview(rideAmountLabel)
+
+        // rideTypeImageView
+        NSLayoutConstraint.activate([
+            rideTypeImageView.centerYAnchor.constraint(
+                equalTo: contentView.centerYAnchor
+            ),
+            rideTypeImageView.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor
+            ),
+            rideTypeImageView.widthAnchor.constraint(equalToConstant: 80),
+        ])
 
         // rideTypeLabel
         NSLayoutConstraint.activate([
@@ -89,8 +112,7 @@ extension RideSelectionOptionCell {
                 constant: 8
             ),
             rideTypeLabel.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 16
+                equalTo: rideTypeImageView.trailingAnchor
             ),
         ])
 
