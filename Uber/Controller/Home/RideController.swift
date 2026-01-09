@@ -11,6 +11,37 @@ class RideController: UIViewController {
 
     // MARK: - Properties
 
+    private var rideTypes = [
+        RideSelectionOptionCellViewModel(
+            rideTypeText: "Taxi 1",
+            rideDistanceText: "5 min away",
+            auxiliaryText: "In partnership with TaxExpress",
+            rideAmountText: "COP 10,459-12,494",
+            isSelected: true
+        ),
+        RideSelectionOptionCellViewModel(
+            rideTypeText: "Taxi 2",
+            rideDistanceText: "15 min away",
+            auxiliaryText: "In partnership with TaxExpress",
+            rideAmountText: "COP 10,459-12,494",
+            isSelected: false
+        ),
+        RideSelectionOptionCellViewModel(
+            rideTypeText: "Taxi 3",
+            rideDistanceText: "10 min away",
+            auxiliaryText: "In partnership with TaxExpress",
+            rideAmountText: "COP 10,459-12,494",
+            isSelected: false
+        ),
+        RideSelectionOptionCellViewModel(
+            rideTypeText: "Taxi 4",
+            rideDistanceText: "25 min away",
+            auxiliaryText: "In partnership with TaxExpress",
+            rideAmountText: "COP 10,459-12,494",
+            isSelected: false
+        ),
+    ]
+
     private let titleLabel: UILabel = {
         let label = UILabel()
 
@@ -48,6 +79,9 @@ class RideController: UIViewController {
         return _tableView
     }()
 
+    private var selectedIndex = IndexPath(row: 0, section: 0) {
+        didSet { tableView.reloadData() }
+    }
     private let ridePaymentView = RidePaymentSelectionView()
 
     var minHeight: CGFloat {
@@ -75,16 +109,8 @@ class RideController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        let indexPath = IndexPath(row: 0, section: 0)
-
-        if let cell = tableView.cellForRow(at: indexPath)
-            as? RideSelectionOptionCell
-        {
-            cell.addSelectedBorder()
-        }
-
         tableView.selectRow(
-            at: indexPath,
+            at: selectedIndex,
             animated: true,
             scrollPosition: .top
         )
@@ -177,16 +203,22 @@ extension RideController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)
         -> Int
     {
-        return 4
+        return rideTypes.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
         -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: NSStringFromClass(RideSelectionOptionCell.self),
-            for: indexPath
-        )
+        guard
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: NSStringFromClass(RideSelectionOptionCell.self),
+                for: indexPath
+            ) as? RideSelectionOptionCell
+        else {
+            fatalError("Failed to instantiate RideSelectionOptionCell")
+        }
+
+        cell.viewModel = rideTypes[indexPath.row]
 
         return cell
     }

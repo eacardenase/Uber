@@ -11,13 +11,16 @@ class RideSelectionOptionCell: UITableViewCell {
 
     // MARK: - Properties
 
+    var viewModel: RideSelectionOptionCellViewModel? {
+        didSet { configure() }
+    }
+
     static let rowHeight: CGFloat = 80
 
     private let rideTypeLabel: UILabel = {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Taxi"
         label.font = .preferredFont(forTextStyle: .headline)
 
         return label
@@ -27,7 +30,6 @@ class RideSelectionOptionCell: UITableViewCell {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "5 min away"
         label.font = .preferredFont(forTextStyle: .subheadline)
 
         return label
@@ -37,7 +39,6 @@ class RideSelectionOptionCell: UITableViewCell {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "In partnership with TaxExpress"
         label.font = .preferredFont(forTextStyle: .footnote)
         label.textColor = .systemGray
 
@@ -48,7 +49,6 @@ class RideSelectionOptionCell: UITableViewCell {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "COP 10,459-12,494"
         label.font = .preferredFont(forTextStyle: .headline)
 
         return label
@@ -133,16 +133,23 @@ extension RideSelectionOptionCell {
 
     }
 
-    func removeSelectedBorder() {
-        layer.cornerRadius = 0
-        layer.borderWidth = 0
-        layer.borderColor = UIColor.systemBackground.cgColor
-    }
+    private func configure() {
+        guard let viewModel else { return }
 
-    func addSelectedBorder() {
-        layer.cornerRadius = 8
-        layer.borderWidth = 2
-        layer.borderColor = UIColor.label.cgColor
+        rideTypeLabel.text = viewModel.rideTypeText
+        rideDistanceLabel.text = viewModel.rideDistanceText
+        auxiliaryLabel.text = viewModel.auxiliaryText
+        rideAmountLabel.text = viewModel.rideAmountText
+
+        if viewModel.isSelected {
+            layer.cornerRadius = 8
+            layer.borderWidth = 2
+            layer.borderColor = UIColor.label.cgColor
+        } else {
+            layer.cornerRadius = 0
+            layer.borderWidth = 0
+            layer.borderColor = UIColor.systemBackground.cgColor
+        }
     }
 
 }
