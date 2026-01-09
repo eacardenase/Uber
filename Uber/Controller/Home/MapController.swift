@@ -426,7 +426,10 @@ extension MapController: UISheetPresentationControllerDelegate {
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
         _ sheetPresentationController: UISheetPresentationController
     ) {
-        guard let smallDetent else { return }
+        guard
+            let smallDetent,
+            sheetPresentationController.selectedDetentIdentifier != .large
+        else { return }
 
         let selectedDetentIdentifier = sheetPresentationController
             .selectedDetentIdentifier

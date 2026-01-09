@@ -40,6 +40,13 @@ class RideController: UIViewController {
             rideAmountText: "COP 10,459-12,494",
             isSelected: false
         ),
+        RideSelectionOptionCellViewModel(
+            rideTypeText: "Taxi 5",
+            rideDistanceText: "25 min away",
+            auxiliaryText: "In partnership with TaxExpress",
+            rideAmountText: "COP 10,459-12,494",
+            isSelected: false
+        ),
     ]
 
     private let titleLabel: UILabel = {
@@ -265,9 +272,7 @@ extension RideController: UITableViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if tableView.visibleCells.count == 2 {
-            scrollToSelectedIndex(animated: false)
-        }
+        scrollToSelectedIndex(animated: false)
     }
 
 }
