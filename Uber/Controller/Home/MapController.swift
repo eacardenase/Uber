@@ -18,6 +18,7 @@ class MapController: UIViewController {
     private let rideController = RideController()
     private var route: MKRoute?
     private var ridesNavigationController: UINavigationController?
+    private var smallDetent: UISheetPresentationController.Detent?
 
     private lazy var mapView: MKMapView = {
         let _mapView = MKMapView()
@@ -214,12 +215,14 @@ extension MapController {
         rideController.view.layoutIfNeeded()
 
         if let sheet = rideController.sheetPresentationController {
-            let smallDetent = UISheetPresentationController.Detent.custom {
+            smallDetent = UISheetPresentationController.Detent.custom {
                 [weak self] _ in
                 guard let self else { return 0 }
 
                 return self.rideController.minHeight
             }
+
+            guard let smallDetent else { return }
 
             sheet.detents = [smallDetent, .medium(), .large()]
             sheet.largestUndimmedDetentIdentifier = .large
@@ -423,11 +426,15 @@ extension MapController: UISheetPresentationControllerDelegate {
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
         _ sheetPresentationController: UISheetPresentationController
     ) {
-        guard
-            sheetPresentationController.selectedDetentIdentifier != .large
-        else { return }
+        guard let smallDetent else { return }
 
-        rideController.scrollToSelectedIndex()
+        let selectedDetentIdentifier = sheetPresentationController
+            .selectedDetentIdentifier
+        let isSmallDetent = selectedDetentIdentifier == smallDetent.identifier
+
+        rideController.isScrollEnable = !isSmallDetent
+
+        rideController.scrollToSelectedIndex(animated: true)
     }
 
 }

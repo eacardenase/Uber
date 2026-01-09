@@ -69,6 +69,8 @@ class RideController: UIViewController {
         _tableView.dataSource = self
         _tableView.delegate = self
         _tableView.separatorStyle = .none
+        _tableView.showsVerticalScrollIndicator = false
+        _tableView.bouncesVertically = false
         _tableView.register(
             RideSelectionOptionCell.self,
             forCellReuseIdentifier: NSStringFromClass(
@@ -83,6 +85,10 @@ class RideController: UIViewController {
         didSet { tableView.reloadData() }
     }
     private let ridePaymentView = RidePaymentSelectionView()
+
+    var isScrollEnable = true {
+        didSet { tableView.isScrollEnabled = isScrollEnable }
+    }
 
     var minHeight: CGFloat {
         let indexPath = IndexPath(row: 0, section: 0)
@@ -194,8 +200,10 @@ extension RideController {
         ])
     }
 
-    func scrollToSelectedIndex() {
-        tableView.scrollToRow(at: selectedIndex, at: .bottom, animated: true)
+    func scrollToSelectedIndex(animated: Bool) {
+        let rect = tableView.rectForRow(at: selectedIndex)
+
+        tableView.scrollRectToVisible(rect, animated: animated)
     }
 
 }
@@ -253,7 +261,13 @@ extension RideController: UITableViewDelegate {
 
         selectedIndex = indexPath
 
-        scrollToSelectedIndex()
+        scrollToSelectedIndex(animated: true)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if tableView.visibleCells.count == 2 {
+            scrollToSelectedIndex(animated: false)
+        }
     }
 
 }
