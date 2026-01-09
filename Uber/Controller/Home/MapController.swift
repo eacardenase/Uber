@@ -437,7 +437,7 @@ extension MapController: UISheetPresentationControllerDelegate {
 
         rideController.isScrollEnable = !isSmallDetent
 
-        rideController.scrollToSelectedIndex(animated: true)
+        rideController.scrollTableViewToSelectedIndex(animated: true)
     }
 
 }
