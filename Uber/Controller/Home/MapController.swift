@@ -15,6 +15,7 @@ class MapController: UIViewController {
     private var user: User?
 
     private let locationController = LocationController()
+    private let rideController = RideController()
     private var route: MKRoute?
     private var ridesNavigationController: UINavigationController?
 
@@ -210,24 +211,26 @@ extension MapController {
     }
 
     private func presentRidesController() {
-        let controller = RideController()
+        rideController.view.layoutIfNeeded()
 
-        controller.view.layoutIfNeeded()
+        if let sheet = rideController.sheetPresentationController {
+            let smallDetent = UISheetPresentationController.Detent.custom {
+                [weak self] _ in
+                guard let self else { return 0 }
 
-        if let sheet = controller.sheetPresentationController {
-            let smallDetent = UISheetPresentationController.Detent.custom { _ in
-                return controller.minHeight
+                return self.rideController.minHeight
             }
 
             sheet.detents = [smallDetent, .medium(), .large()]
             sheet.largestUndimmedDetentIdentifier = .large
             sheet.selectedDetentIdentifier = .medium
             sheet.prefersGrabberVisible = true
+            sheet.delegate = self
         }
 
-        controller.isModalInPresentation = true
+        rideController.isModalInPresentation = true
 
-        present(controller, animated: true)
+        present(rideController, animated: true)
     }
 
 }
@@ -409,6 +412,22 @@ extension MapController {
                 animated: true
             )
         }
+    }
+
+}
+
+// MARK: - UISheetPresentationControllerDelegate
+
+extension MapController: UISheetPresentationControllerDelegate {
+
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
+        _ sheetPresentationController: UISheetPresentationController
+    ) {
+        guard
+            sheetPresentationController.selectedDetentIdentifier != .large
+        else { return }
+
+        rideController.scrollToSelectedIndex()
     }
 
 }

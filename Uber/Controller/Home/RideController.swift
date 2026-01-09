@@ -194,6 +194,10 @@ extension RideController {
         ])
     }
 
+    func scrollToSelectedIndex() {
+        tableView.scrollToRow(at: selectedIndex, at: .bottom, animated: true)
+    }
+
 }
 
 // MARK: - UITableViewDataSource
@@ -233,18 +237,23 @@ extension RideController: UITableViewDelegate {
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
-        for (index, cell) in tableView.visibleCells.enumerated() {
-            guard
-                let cell = cell
-                    as? RideSelectionOptionCell
-            else { return }
+        let newSelectedRide = rideTypes[indexPath.row]
 
-            if index == indexPath.row {
-                cell.addSelectedBorder()
-            } else {
-                cell.removeSelectedBorder()
+        rideTypes = rideTypes.map { ride in
+            var currentRide = ride
+
+            currentRide.isSelected = false
+
+            if currentRide == newSelectedRide {
+                currentRide.isSelected = true
             }
+
+            return currentRide
         }
+
+        selectedIndex = indexPath
+
+        scrollToSelectedIndex()
     }
 
 }
