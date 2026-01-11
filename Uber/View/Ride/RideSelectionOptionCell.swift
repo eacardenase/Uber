@@ -86,8 +86,6 @@ class RideSelectionOptionCell: UITableViewCell {
 extension RideSelectionOptionCell {
 
     private func setupViews() {
-        backgroundColor = .systemBackground
-
         contentView.addSubview(rideTypeImageView)
         contentView.addSubview(rideTypeLabel)
         contentView.addSubview(rideDistanceLabel)

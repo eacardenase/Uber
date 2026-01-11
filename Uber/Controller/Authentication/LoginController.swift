@@ -24,10 +24,17 @@ class LoginController: UIViewController {
         return label
     }()
 
-    private let emailTextField = DecoratedTextField(
-        imageResource: .icMailOutlineWhite2X,
-        placeholder: "Email"
-    )
+    private let emailTextField: DecoratedTextField = {
+        let textField = DecoratedTextField(
+            imageResource: .icMailOutlineWhite2X,
+            placeholder: "Email"
+        )
+
+        textField.keyboardType = .emailAddress
+
+        return textField
+    }()
+
     private let passwordTextField = DecoratedTextField(
         imageResource: .icLockOutlineWhite2X,
         placeholder: "Password",

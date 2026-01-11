@@ -100,9 +100,10 @@ class RideController: UIViewController {
     var minHeight: CGFloat {
         let indexPath = IndexPath(row: 0, section: 0)
         let rect = tableView.rectForRow(at: indexPath)
+        let tableViewPadding: CGFloat = 32
 
         return tableView.frame.origin.y
-            + rect.height + 32
+            + rect.height + tableViewPadding
             + ridePaymentView.frame.height
     }
 
@@ -210,7 +211,7 @@ extension RideController {
     func scrollTableViewToSelectedIndex(animated: Bool) {
         tableView.scrollToRow(
             at: selectedIndex,
-            at: .middle,
+            at: .bottom,
             animated: animated
         )
     }

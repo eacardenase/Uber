@@ -73,7 +73,6 @@ extension PaymentMethodView {
 
     private func setupViews() {
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .systemBackground
 
         addSubview(paymentMethodImageView)
         addSubview(paymentMethodNameLabel)

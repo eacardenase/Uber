@@ -99,7 +99,10 @@ extension RidePaymentSelectionView {
             ),
             selectionButtonLeadingAnchor,
             selectionButtonTrailingAnchor,
-            rideSelectionButton.bottomAnchor.constraint(equalTo: bottomAnchor),
+            rideSelectionButton.bottomAnchor.constraint(
+                equalTo: bottomAnchor,
+                constant: -16
+            ),
             rideSelectionButton.heightAnchor.constraint(equalToConstant: 50),
         ])
     }
