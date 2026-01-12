@@ -19,6 +19,13 @@ class MapController: UIViewController {
     private var route: MKRoute?
     private var ridesNavigationController: UINavigationController?
     private var smallDetent: UISheetPresentationController.Detent?
+    private var selectedDetentIdentifier:
+        UISheetPresentationController.Detent.Identifier?
+    {
+        didSet {
+            showDestinationAnnotations(mapView.annotations)
+        }
+    }
 
     private lazy var mapView: MKMapView = {
         let _mapView = MKMapView()
@@ -229,11 +236,36 @@ extension MapController {
             sheet.selectedDetentIdentifier = .medium
             sheet.prefersGrabberVisible = true
             sheet.delegate = self
+
+            self.selectedDetentIdentifier = .medium
         }
 
         rideController.isModalInPresentation = true
 
         present(rideController, animated: true)
+    }
+
+    private func showDestinationAnnotations(_ annotations: [MKAnnotation]) {
+        var bottomPadding: CGFloat = 0
+
+        switch selectedDetentIdentifier {
+        case .large:
+            bottomPadding = 0
+        case .medium:
+            bottomPadding = rideController.minHeight + 100
+        default:
+            bottomPadding = rideController.minHeight
+        }
+
+        let insets = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: bottomPadding,
+            right: 0
+        )
+
+        mapView.layoutMargins = insets
+        mapView.showAnnotations(annotations, animated: true)
     }
 
 }
@@ -329,7 +361,7 @@ extension MapController: MKMapViewDelegate {
             !$0.isKind(of: DriverAnnotation.self)
         }
 
-        mapView.showAnnotations(annotations, animated: true)
+        showDestinationAnnotations(annotations)
     }
 
     func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay)
@@ -407,13 +439,13 @@ extension MapController {
     @objc func backButtonTapped(_ sender: UIButton) {
         guard let ridesNavigationController else { return }
 
-        ridesNavigationController.dismiss(animated: true) {
-            self.removeAnnotationsAndPolyline()
+        ridesNavigationController.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
 
-            self.mapView.showAnnotations(
-                self.mapView.annotations,
-                animated: true
-            )
+            let annotations = self.mapView.annotations
+
+            self.removeAnnotationsAndPolyline()
+            self.showDestinationAnnotations(annotations)
         }
     }
 
@@ -431,13 +463,14 @@ extension MapController: UISheetPresentationControllerDelegate {
             sheetPresentationController.selectedDetentIdentifier != .large
         else { return }
 
-        let selectedDetentIdentifier = sheetPresentationController
-            .selectedDetentIdentifier
         let isSmallDetent = selectedDetentIdentifier == smallDetent.identifier
 
         rideController.isScrollEnable = !isSmallDetent
 
         rideController.scrollTableViewToSelectedIndex(animated: true)
+
+        selectedDetentIdentifier =
+            sheetPresentationController.selectedDetentIdentifier
     }
 
 }
