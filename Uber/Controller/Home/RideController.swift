@@ -86,21 +86,6 @@ class RideController: UIViewController {
         fetchRides()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        tableView.selectRow(
-            at: selectedIndex,
-            animated: true,
-            scrollPosition: .top
-        )
-    }
-
 }
 
 // MARK: - Helpers
@@ -227,6 +212,11 @@ extension RideController: UITableViewDelegate {
         didSelectRowAt indexPath: IndexPath
     ) {
         let newSelectedRide = availableRides[indexPath.row]
+        let viewModel = RidePaymentSelectionViewModel(
+            ride: newSelectedRide.ride
+        )
+
+        ridePaymentView.viewModel = viewModel
 
         availableRides = availableRides.map { ride in
             ride.isSelected = false
@@ -273,7 +263,15 @@ extension RideController {
                     RideSelectionOptionCellViewModel(ride: $0)
                 }
 
-                self.availableRides.first?.isSelected = true
+                if let firstAvailableRideViewModel = self.availableRides.first {
+                    firstAvailableRideViewModel.isSelected = true
+
+                    let viewModel = RidePaymentSelectionViewModel(
+                        ride: firstAvailableRideViewModel.ride
+                    )
+
+                    ridePaymentView.viewModel = viewModel
+                }
 
                 self.tableView.reloadData()
             case .failure(let error):

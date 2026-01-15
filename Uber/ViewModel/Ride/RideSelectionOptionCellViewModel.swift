@@ -11,7 +11,7 @@ class RideSelectionOptionCellViewModel: NSObject {
 
     // MARK: - Properties
 
-    private let ride: Ride
+    let ride: Ride
 
     var rideTypeText: String {
         return ride.name

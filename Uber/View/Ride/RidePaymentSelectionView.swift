@@ -127,7 +127,7 @@ extension RidePaymentSelectionView {
     private func configure() {
         guard let viewModel else { return }
 
-        rideSelectionButton.setTitle("", for: .normal)
+        rideSelectionButton.setTitle(viewModel.rideName, for: .normal)
     }
 
 }
