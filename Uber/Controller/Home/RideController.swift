@@ -11,43 +11,7 @@ class RideController: UIViewController {
 
     // MARK: - Properties
 
-    private var rideTypes = [
-        RideSelectionOptionCellViewModel(
-            rideTypeText: "Taxi 1",
-            rideDistanceText: "5 min away",
-            auxiliaryText: "In partnership with TaxExpress",
-            rideAmountText: "COP 10,459-12,494",
-            isSelected: true
-        ),
-        RideSelectionOptionCellViewModel(
-            rideTypeText: "Taxi 2",
-            rideDistanceText: "15 min away",
-            auxiliaryText: "In partnership with TaxExpress",
-            rideAmountText: "COP 10,459-12,494",
-            isSelected: false
-        ),
-        RideSelectionOptionCellViewModel(
-            rideTypeText: "Taxi 3",
-            rideDistanceText: "10 min away",
-            auxiliaryText: "In partnership with TaxExpress",
-            rideAmountText: "COP 10,459-12,494",
-            isSelected: false
-        ),
-        RideSelectionOptionCellViewModel(
-            rideTypeText: "Taxi 4",
-            rideDistanceText: "25 min away",
-            auxiliaryText: "In partnership with TaxExpress",
-            rideAmountText: "COP 10,459-12,494",
-            isSelected: false
-        ),
-        RideSelectionOptionCellViewModel(
-            rideTypeText: "Taxi 5",
-            rideDistanceText: "25 min away",
-            auxiliaryText: "In partnership with TaxExpress",
-            rideAmountText: "COP 10,459-12,494",
-            isSelected: false
-        ),
-    ]
+    private var availableRides = [RideSelectionOptionCellViewModel]()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -91,6 +55,7 @@ class RideController: UIViewController {
     private var selectedIndex = IndexPath(row: 0, section: 0) {
         didSet { tableView.reloadData() }
     }
+
     private let ridePaymentView = RidePaymentSelectionView()
 
     var isScrollEnable = true {
@@ -112,7 +77,13 @@ class RideController: UIViewController {
     override func loadView() {
         view = UIView()
 
+        ridePaymentView.delegate = self
+
         setupViews()
+    }
+
+    override func viewDidLoad() {
+        fetchRides()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -225,7 +196,7 @@ extension RideController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int)
         -> Int
     {
-        return rideTypes.count
+        return availableRides.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath)
@@ -240,7 +211,7 @@ extension RideController: UITableViewDataSource {
             fatalError("Failed to instantiate RideSelectionOptionCell")
         }
 
-        cell.viewModel = rideTypes[indexPath.row]
+        cell.viewModel = availableRides[indexPath.row]
 
         return cell
     }
@@ -255,18 +226,16 @@ extension RideController: UITableViewDelegate {
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
-        let newSelectedRide = rideTypes[indexPath.row]
+        let newSelectedRide = availableRides[indexPath.row]
 
-        rideTypes = rideTypes.map { ride in
-            var currentRide = ride
+        availableRides = availableRides.map { ride in
+            ride.isSelected = false
 
-            currentRide.isSelected = false
-
-            if currentRide == newSelectedRide {
-                currentRide.isSelected = true
+            if ride == newSelectedRide {
+                ride.isSelected = true
             }
 
-            return currentRide
+            return ride
         }
 
         selectedIndex = indexPath
@@ -276,6 +245,41 @@ extension RideController: UITableViewDelegate {
 
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         scrollTableViewToSelectedIndex(animated: true)
+    }
+
+}
+
+// MARK: - RidePaymentSelectionViewDelegate
+
+extension RideController: RidePaymentSelectionViewDelegate {
+
+    func storeTrip() {
+        print(#function)
+    }
+
+}
+
+// MARK: - API
+
+extension RideController {
+
+    private func fetchRides() {
+        RideService.fetchAvailableRides { [weak self] result in
+            guard let self else { return }
+
+            switch result {
+            case .success(let rides):
+                self.availableRides = rides.map {
+                    RideSelectionOptionCellViewModel(ride: $0)
+                }
+
+                self.availableRides.first?.isSelected = true
+
+                self.tableView.reloadData()
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 
 }

@@ -52,6 +52,7 @@ class RideSelectionOptionCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .preferredFont(forTextStyle: .footnote)
         label.textColor = .systemGray
+        label.numberOfLines = 2
 
         return label
     }()
@@ -133,6 +134,10 @@ extension RideSelectionOptionCell {
             ),
             auxiliaryLabel.leadingAnchor.constraint(
                 equalTo: rideTypeLabel.leadingAnchor
+            ),
+            auxiliaryLabel.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -4
             ),
             auxiliaryLabel.bottomAnchor.constraint(
                 equalTo: contentView.bottomAnchor,

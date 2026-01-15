@@ -7,9 +7,21 @@
 
 import UIKit
 
+protocol RidePaymentSelectionViewDelegate: AnyObject {
+
+    func storeTrip()
+
+}
+
 class RidePaymentSelectionView: UIView {
 
     // MARK: - Properties
+
+    weak var delegate: RidePaymentSelectionViewDelegate?
+
+    var viewModel: RidePaymentSelectionViewModel? {
+        didSet { configure() }
+    }
 
     private let dividerView: UIView = {
         let view = UIView()
@@ -22,7 +34,7 @@ class RidePaymentSelectionView: UIView {
 
     private let paymentMethodView = PaymentMethodView()
 
-    private let rideSelectionButton: UIButton = {
+    private lazy var rideSelectionButton: UIButton = {
         let button = UIButton(type: .system)
 
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -31,6 +43,11 @@ class RidePaymentSelectionView: UIView {
         button.backgroundColor = .label
         button.layer.cornerRadius = 8
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        button.addTarget(
+            self,
+            action: #selector(rideSelectionButtonTapped),
+            for: .touchUpInside
+        )
 
         return button
     }()
@@ -105,6 +122,22 @@ extension RidePaymentSelectionView {
             ),
             rideSelectionButton.heightAnchor.constraint(equalToConstant: 50),
         ])
+    }
+
+    private func configure() {
+        guard let viewModel else { return }
+
+        rideSelectionButton.setTitle("", for: .normal)
+    }
+
+}
+
+// MARK: - Actions
+
+extension RidePaymentSelectionView {
+
+    @objc func rideSelectionButtonTapped(_ sender: UIButton) {
+        delegate?.storeTrip()
     }
 
 }
