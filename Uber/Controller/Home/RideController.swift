@@ -63,7 +63,7 @@ class RideController: UIViewController {
     }
 
     var minHeight: CGFloat {
-        let indexPath = IndexPath(row: 0, section: 0)
+        let indexPath = selectedIndex
         let rect = tableView.rectForRow(at: indexPath)
         let tableViewPadding: CGFloat = 32
 

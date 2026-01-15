@@ -38,7 +38,6 @@ class RidePaymentSelectionView: UIView {
         let button = UIButton(type: .system)
 
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Choose Taxi", for: .normal)
         button.tintColor = .systemBackground
         button.backgroundColor = .label
         button.layer.cornerRadius = 8
