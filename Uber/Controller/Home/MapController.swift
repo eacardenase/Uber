@@ -259,9 +259,9 @@ extension MapController {
 
         let insets = UIEdgeInsets(
             top: 0,
-            left: 0,
+            left: 16,
             bottom: bottomPadding,
-            right: 0
+            right: 16
         )
 
         mapView.layoutMargins = insets

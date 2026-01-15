@@ -165,11 +165,9 @@ extension RideController {
     }
 
     func scrollTableViewToSelectedIndex(animated: Bool) {
-        tableView.scrollToRow(
-            at: selectedIndex,
-            at: .bottom,
-            animated: animated
-        )
+        let rect = tableView.rectForRow(at: selectedIndex)
+
+        tableView.scrollRectToVisible(rect, animated: animated)
     }
 
 }
@@ -233,8 +231,11 @@ extension RideController: UITableViewDelegate {
         scrollTableViewToSelectedIndex(animated: true)
     }
 
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        scrollTableViewToSelectedIndex(animated: true)
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if tableView.visibleCells.count == 2 {
+            scrollTableViewToSelectedIndex(animated: false)
+        }
+
     }
 
 }
