@@ -12,6 +12,9 @@ class MapController: UIViewController {
 
     // MARK: - Properties
 
+    var startLocation: Location?
+    var endLocation: Location?
+
     private var user: User?
 
     private let locationController = LocationController()
@@ -133,14 +136,15 @@ extension MapController {
     }
 
     private func updateAnnotationsCoordinates(for locations: [UserLocation]) {
-        for location in locations {
+        for userLocation in locations {
+            let location = userLocation.location
             let coordinate = CLLocationCoordinate2D(
                 latitude: location.latitude,
                 longitude: location.longitude
             )
 
             let driverAnnotation = DriverAnnotation(
-                uid: location.userId,
+                uid: userLocation.userId,
                 coordinate: coordinate
             )
 
@@ -150,7 +154,7 @@ extension MapController {
                 guard let mapAnnotation = mapAnnotation as? DriverAnnotation
                 else { return false }
 
-                if mapAnnotation.uid == location.userId {
+                if mapAnnotation.uid == userLocation.userId {
                     mapAnnotation.updatePosition(with: coordinate)
 
                     return true
@@ -219,6 +223,7 @@ extension MapController {
     }
 
     private func presentRidesController() {
+        rideController.delegate = self
         rideController.view.layoutIfNeeded()
 
         if let sheet = rideController.sheetPresentationController {
@@ -352,6 +357,10 @@ extension MapController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect annotation: any MKAnnotation) {
         let placemark = MKPlacemark(coordinate: annotation.coordinate)
         let destination = MKMapItem(placemark: placemark)
+        endLocation = Location(
+            latitude: annotation.coordinate.latitude,
+            longitude: annotation.coordinate.longitude
+        )
 
         removePolyline(for: route)
 
@@ -471,6 +480,21 @@ extension MapController: UISheetPresentationControllerDelegate {
 
         selectedDetentIdentifier =
             sheetPresentationController.selectedDetentIdentifier
+    }
+
+}
+
+// MARK: - RideControllerDelegate
+
+extension MapController: RideControllerDelegate {
+
+    func controller(
+        _ controller: RideController,
+        wantsToRequestRide ride: RideProduct
+    ) {
+        print(startLocation)
+        print(endLocation)
+        print(ride)
     }
 
 }

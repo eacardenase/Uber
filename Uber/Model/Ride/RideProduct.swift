@@ -1,5 +1,5 @@
 //
-//  Ride.swift
+//  RideProduct.swift
 //  Uber
 //
 //  Created by Edwin Cardenas on 1/14/26.
@@ -14,7 +14,7 @@ struct PriceRange: Codable {
 
 }
 
-struct Ride: Codable {
+struct RideProduct: Codable {
 
     let uid: String
     let name: String

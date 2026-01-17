@@ -11,7 +11,7 @@ class RideSelectionOptionCellViewModel: NSObject {
 
     // MARK: - Properties
 
-    let ride: Ride
+    let ride: RideProduct
 
     var rideTypeText: String {
         return ride.name
@@ -56,7 +56,7 @@ class RideSelectionOptionCellViewModel: NSObject {
 
     // MARK: - Initializers
 
-    init(ride: Ride) {
+    init(ride: RideProduct) {
         self.ride = ride
     }
 

@@ -11,7 +11,7 @@ struct RidePaymentSelectionViewModel {
 
     // MARK: - Properties
 
-    private let ride: Ride
+    private let ride: RideProduct
 
     var rideName: String {
         return "Choose \(ride.name)"
@@ -19,7 +19,7 @@ struct RidePaymentSelectionViewModel {
 
     // MARK: - Initializers
 
-    init(ride: Ride) {
+    init(ride: RideProduct) {
         self.ride = ride
     }
 

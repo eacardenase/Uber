@@ -7,11 +7,17 @@
 
 import Foundation
 
+struct Location: Codable {
+
+    let latitude: Double
+    let longitude: Double
+
+}
+
 struct UserLocation: Codable {
 
     let userId: String
     let accountType: AccountType
-    let latitude: Double
-    let longitude: Double
+    let location: Location
 
 }

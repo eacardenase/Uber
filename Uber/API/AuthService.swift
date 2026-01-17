@@ -23,6 +23,8 @@ struct AuthService {
 
     private init() {}
 
+    static var currentUser = Auth.auth().currentUser
+
     static func createUser(
         with credentials: AuthCredentials,
         completion: @escaping (Result<User, NetworkingError>) -> Void

@@ -16,7 +16,7 @@ struct LocationService {
         for user: User,
         completion: @escaping (Result<User, NetworkingError>) -> Void
     ) {
-        guard let location = LocationManager.shared.location else {
+        guard let currentLocation = LocationManager.shared.location else {
             completion(
                 .failure(.serverError("Failed to get user location."))
             )
@@ -24,11 +24,15 @@ struct LocationService {
             return
         }
 
+        let location = Location(
+            latitude: currentLocation.coordinate.latitude,
+            longitude: currentLocation.coordinate.longitude
+        )
+
         let userLocation = UserLocation(
             userId: user.uid,
             accountType: user.accountType,
-            latitude: location.coordinate.latitude,
-            longitude: location.coordinate.longitude
+            location: location
         )
 
         do {
@@ -66,14 +70,17 @@ struct LocationService {
         let maxLongitudeRange = longitude + range.longitude
         let minLatitudeRange = latitude - range.latitude
         let maxLatitudeRange = latitude + range.latitude
+        
+        let longitudeFieldPath = FieldPath(["location", "longitude"])
+        let latitudeFieldPath = FieldPath(["location", "latitude"])
 
         let query = Firestore.firestore().collection("user-locations")
-            .order(by: "longitude")
-            .whereField("accountType", isEqualTo: 1)
-            .whereField("longitude", isGreaterThanOrEqualTo: minLongitudeRange)
-            .whereField("longitude", isLessThanOrEqualTo: maxLongitudeRange)
-            .whereField("latitude", isGreaterThanOrEqualTo: minLatitudeRange)
-            .whereField("latitude", isLessThanOrEqualTo: maxLatitudeRange)
+            .order(by: longitudeFieldPath)
+            .whereField("accountType", isEqualTo: AccountType.driver.rawValue)
+            .whereField(longitudeFieldPath, isGreaterThanOrEqualTo: minLongitudeRange)
+            .whereField(longitudeFieldPath, isLessThanOrEqualTo: maxLongitudeRange)
+            .whereField(latitudeFieldPath, isGreaterThanOrEqualTo: minLatitudeRange)
+            .whereField(latitudeFieldPath, isLessThanOrEqualTo: maxLatitudeRange)
 
         query.addSnapshotListener { snapshot, error in
             if let error {

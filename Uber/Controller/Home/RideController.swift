@@ -7,9 +7,20 @@
 
 import UIKit
 
+protocol RideControllerDelegate: AnyObject {
+
+    func controller(
+        _ controller: RideController,
+        wantsToRequestRide ride: RideProduct
+    )
+
+}
+
 class RideController: UIViewController {
 
     // MARK: - Properties
+
+    weak var delegate: RideControllerDelegate?
 
     private var availableRides = [RideSelectionOptionCellViewModel]()
 
@@ -244,8 +255,18 @@ extension RideController: UITableViewDelegate {
 
 extension RideController: RidePaymentSelectionViewDelegate {
 
-    func storeTrip() {
-        print(#function)
+    func requestRide() {
+        let viewModel = availableRides[selectedIndex.row]
+
+        delegate?.controller(self, wantsToRequestRide: viewModel.ride)
+
+        //        RideService.requestRide(
+        //            product: viewModel.ride,
+        //            startLocation: <#T##Location#>,
+        //            endLocation: <#T##Location#>
+        //        ) { result in
+        //            print(result)
+        //        }
     }
 
 }

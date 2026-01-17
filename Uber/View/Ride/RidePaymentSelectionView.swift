@@ -9,7 +9,7 @@ import UIKit
 
 protocol RidePaymentSelectionViewDelegate: AnyObject {
 
-    func storeTrip()
+    func requestRide()
 
 }
 
@@ -136,7 +136,7 @@ extension RidePaymentSelectionView {
 extension RidePaymentSelectionView {
 
     @objc func rideSelectionButtonTapped(_ sender: UIButton) {
-        delegate?.storeTrip()
+        delegate?.requestRide()
     }
 
 }
