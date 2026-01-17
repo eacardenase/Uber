@@ -12,7 +12,6 @@ class MapController: UIViewController {
 
     // MARK: - Properties
 
-    var startLocation: Location?
     var endLocation: Location?
 
     private var user: User?
@@ -492,9 +491,25 @@ extension MapController: RideControllerDelegate {
         _ controller: RideController,
         wantsToRequestRide ride: RideProduct
     ) {
-        print(startLocation)
-        print(endLocation)
-        print(ride)
+        guard
+            let endLocation,
+            let location = LocationManager.shared.location
+        else {
+            return
+        }
+
+        let startLocation = Location(
+            latitude: location.coordinate.latitude,
+            longitude: location.coordinate.longitude
+        )
+
+        RideService.requestRide(
+            product: ride,
+            startLocation: startLocation,
+            endLocation: endLocation
+        ) { result in
+            print(result)
+        }
     }
 
 }

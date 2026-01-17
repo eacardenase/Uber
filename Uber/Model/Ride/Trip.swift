@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseCore
 
 enum TripStatus: String, Codable {
 
@@ -20,12 +21,12 @@ enum TripStatus: String, Codable {
 
 struct Trip: Codable {
 
-    let uid: String
     let userId: String
     let driverId: String?
     let startLocation: Location
     let endLocation: Location
     let status: TripStatus
-    let rideProduct: RideProduct
+    let product: RideProduct
+    let createdAt: Timestamp
 
 }

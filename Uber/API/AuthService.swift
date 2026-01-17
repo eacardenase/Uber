@@ -8,7 +8,8 @@
 import FirebaseAuth
 
 enum NetworkingError: Error {
-    case decodingError
+    case notAuthenticated
+    case encodingError(String)
     case serverError(String)
 }
 

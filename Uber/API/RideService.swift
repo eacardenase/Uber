@@ -49,14 +49,33 @@ struct RideService {
         completion: @escaping (Result<Trip, NetworkingError>) -> Void
     ) {
         guard let currentUserId = AuthService.currentUser?.uid else {
-            completion(.failure(.serverError("User not logged in.")))
+            completion(.failure(.notAuthenticated))
 
             return
         }
 
-        print("DEBUG: Requesting ride for \(product.name).")
+        let trip = Trip(
+            userId: currentUserId,
+            driverId: nil,
+            startLocation: startLocation,
+            endLocation: endLocation,
+            status: .requested,
+            product: product,
+            createdAt: Timestamp()
+        )
 
-        //        completion(true)
+        do {
+            try Firestore.firestore().collection("trips")
+                .addDocument(from: trip)
+
+            DispatchQueue.main.async {
+                completion(.success(trip))
+            }
+        } catch {
+            DispatchQueue.main.async {
+                completion(.failure(.encodingError(error.localizedDescription)))
+            }
+        }
     }
 
 }

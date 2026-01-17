@@ -259,14 +259,6 @@ extension RideController: RidePaymentSelectionViewDelegate {
         let viewModel = availableRides[selectedIndex.row]
 
         delegate?.controller(self, wantsToRequestRide: viewModel.ride)
-
-        //        RideService.requestRide(
-        //            product: viewModel.ride,
-        //            startLocation: <#T##Location#>,
-        //            endLocation: <#T##Location#>
-        //        ) { result in
-        //            print(result)
-        //        }
     }
 
 }

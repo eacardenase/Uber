@@ -56,7 +56,7 @@ struct UserService {
 
                 completion(.success(user))
             } catch {
-                completion(.failure(.decodingError))
+                completion(.failure(.encodingError(error.localizedDescription)))
             }
         }
     }
