@@ -80,6 +80,16 @@ class RideSelectionOptionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if viewModel?.isSelected == true {
+            layer.borderColor = UIColor.label.cgColor
+        } else {
+            layer.borderColor = UIColor.systemBackground.cgColor
+        }
+    }
+
 }
 
 // MARK: - Helpers
